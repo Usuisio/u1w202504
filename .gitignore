@@ -42,6 +42,18 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Assets/Fonts フォントファイル除外（.metaは除外しない）
+Assets/Fonts/*.ttf
+Assets/Fonts/*.otf
+Assets/Fonts/*.woff
+Assets/Fonts/*.woff2
+Assets/Fonts/*.fon
+Assets/Fonts/*.fnt
+Assets/Fonts/*.ttc
+Assets/Fonts/*.eot
+Assets/Fonts/*.svg
+Assets/Fonts/*.asset
+
 # OS generated
 .DS_Store
 .DS_Store?
