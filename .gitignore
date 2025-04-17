@@ -53,6 +53,7 @@ Assets/Fonts/*.ttc
 Assets/Fonts/*.eot
 Assets/Fonts/*.svg
 Assets/Fonts/*.asset
+Assets/Fonts/*.*
 
 # OS generated
 .DS_Store
