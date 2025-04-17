@@ -8,55 +8,13 @@ public class EventController : MonoBehaviour
 {
     [SerializeField] private DialogueWindow dialogueWindow;
 
-    // 仮のイベントグループリスト（1クリックで順に再生されるイベントのセット）
-    private List<List<EventData>> eventGroups = new List<List<EventData>>();
+    // ScriptableObjectで管理するイベントグループリスト
+    [SerializeField]
+    private List<EventGroup> eventGroups = new List<EventGroup>();
     private int currentGroupIndex = 0;
 
     private void Start()
     {
-        // 仮データセットアップ（1クリックで外→内の順に再生）
-        eventGroups.Add(new List<EventData> {
-            new EventData
-            {
-                Id = "event001b",
-                Type = "OutsideGameDialogue",
-                Character = "コッペ",
-                Text = "やっほー！"
-            },
-            new EventData
-            {
-                Id = "event001a",
-                Type = "InsideGameDialogue",
-                Character = "ノワ",
-                Text = "こんにちは、プレイヤーさん！"
-            }
-        });
-        eventGroups.Add(new List<EventData> {
-            new EventData
-            {
-                Id = "event002b",
-                Type = "OutsideGameDialogue",
-                Character = "コッペ",
-                Text = "ノワ、今日も元気そうだね。"
-            },
-            new EventData
-            {
-                Id = "event002a",
-                Type = "InsideGameDialogue",
-                Character = "ノワ",
-                Text = "今日はどんな一日だった？"
-            }
-        });
-eventGroups.Add(new List<EventData> {
-            new EventData
-            {
-                Id = "event002a",
-                Type = "InsideGameDialogue",
-                Character = "ノワ",
-                Text = "楽しかった！"
-            }
-        });
-
         PlayCurrentGroup();
     }
 
@@ -71,8 +29,9 @@ eventGroups.Add(new List<EventData> {
     private void PlayCurrentGroup()
     {
         if (currentGroupIndex < 0 || currentGroupIndex >= eventGroups.Count) return;
-        var group = eventGroups[currentGroupIndex];
-        PlayEventSequence(group, 0);
+        var groupAsset = eventGroups[currentGroupIndex];
+        if (groupAsset == null || groupAsset.events == null || groupAsset.events.Count == 0) return;
+        PlayEventSequence(groupAsset.events, 0);
     }
 
     // group内のeventListを順番に再生
@@ -80,17 +39,50 @@ eventGroups.Add(new List<EventData> {
     {
         if (idx >= group.Count) return;
         var ev = group[idx];
-        if (ev.Type == "InsideGameDialogue")
+        switch (ev.Type)
         {
-            dialogueWindow.ShowNowa(ev.Text, () => PlayEventSequence(group, idx + 1));
-        }
-        else if (ev.Type == "OutsideGameDialogue")
-        {
-            dialogueWindow.ShowKoppe(ev.Text, () => PlayEventSequence(group, idx + 1));
-        }
-        else
-        {
-            PlayEventSequence(group, idx + 1);
+            case EventType.InsideGameDialogue:
+                dialogueWindow.ShowInsideDialogue(
+                    ev.InsideName,
+                    ev.InsideDialogueText,
+                    ev.StandingImage,
+                    StandingFadeType.None,
+                    0.3f,
+                    ScreenFadeType.None,
+                    Color.black,
+                    0.5f,
+                    () => PlayEventSequence(group, idx + 1)
+                );
+                break;
+            case EventType.OutsideGameDialogue:
+                dialogueWindow.ShowOutsideDialogue(ev.OutsideDialogueText, ev.StandingImage, () => PlayEventSequence(group, idx + 1));
+                break;
+            case EventType.StandingFade:
+                dialogueWindow.ShowInsideDialogue(
+                    null, null, ev.StandingImage,
+                    ev.StandingFade,
+                    ev.StandingFadeDuration,
+                    ScreenFadeType.None,
+                    Color.black,
+                    0.5f,
+                    () => PlayEventSequence(group, idx + 1)
+                );
+                break;
+            case EventType.ScreenFade:
+                dialogueWindow.ShowInsideDialogue(
+                    null, null, null,
+                    StandingFadeType.None,
+                    0.3f,
+                    ev.ScreenFade,
+                    ev.ScreenFadeColor,
+                    ev.ScreenFadeDuration,
+                    () => PlayEventSequence(group, idx + 1)
+                );
+                break;
+            // SetActiveイベントは削除
+            default:
+                PlayEventSequence(group, idx + 1);
+                break;
         }
     }
 

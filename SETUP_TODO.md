@@ -17,3 +17,16 @@
   4. Assets/Plugins/Demigiant/DOTween/Modules/ に DOTweenModuleTMP.cs が追加されていることを確認する
 
 ※この作業を行うとTextMeshPro用のDOText拡張が使えるようになります。
+
+---
+
+## イベントデータをScriptableObjectで管理する手順
+
+1. Projectウィンドウで右クリック →「Create」→「Game」→「Event Group」を選んで、イベントグループ用のアセットを作成しよう！
+2. 作ったEventGroupアセットを選択して、Inspectorで「+」ボタンからセリフやイベント（EventData）をどんどん追加できるよ。
+   - キャラ名やセリフ本文、タイプ（InsideGameDialogue/OutsideGameDialogueなど）もここで編集OK！
+3. EventControllerオブジェクトのInspectorで「Event Groups」リストに、作成したEventGroupアセットをドラッグ＆ドロップ！
+   - 複数グループも追加できるから、シーンごと・イベントごとに分けて管理もラクラク。
+4. プレイモードで動作確認して、セリフがちゃんと表示されるかチェック！
+
+※ScriptableObjectアセットを増やせば、セリフやイベントの追加・修正が超カンタンになるよ！
