@@ -3,17 +3,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using Assets.Scripts.UI;
 
 /// <summary>
 /// テキスト表示＆テキスト送りを管理するクラス
 /// </summary>
+namespace Assets.Scripts.UI
+{
 public class DialogueWindow : MonoBehaviour
 {
-    [Header("内側ゲームの立ち絵")]
-    [SerializeField] private Image insideStandingImage;
-
-    [Header("画面全体フェード用イメージ")]
-    [SerializeField] private Image screenFadeImage;
+    [Header("演出プレイヤー")]
+    [SerializeField] private DialogueEffectPlayer effectPlayer;
 
     [Header("外側ゲームの立ち絵")]
     [SerializeField] private Image outsideStandingImage;
@@ -63,35 +63,13 @@ public class DialogueWindow : MonoBehaviour
             float duration = charInterval * (text?.Length ?? 0);
             insideDialogueTween = insideDialogueText.DOText(text ?? "", duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(() => { if (onComplete != null) onComplete(); });
         }
-        // 立ち絵
-        if (insideStandingImage != null)
+        // 立ち絵・画面フェード演出
+        if (effectPlayer != null)
         {
-            insideStandingImage.sprite = standingImage;
-            insideStandingImage.enabled = standingImage != null;
-            // 立ち絵フェード
-            if (standingFade == StandingFadeType.FadeIn)
+            effectPlayer.PlayStandingEffect(standingImage, standingFade, standingFadeDuration);
+            if (screenFade != ScreenFadeType.None)
             {
-                insideStandingImage.color = new Color(1, 1, 1, 0);
-                insideStandingImage.DOFade(1f, standingFadeDuration);
-            }
-            else if (standingFade == StandingFadeType.FadeOut)
-            {
-                insideStandingImage.DOFade(0f, standingFadeDuration);
-            }
-        }
-        // 画面全体フェード
-        if (screenFadeImage != null && screenFade != ScreenFadeType.None)
-        {
-            screenFadeImage.color = screenFadeColor ?? Color.black;
-            if (screenFade == ScreenFadeType.FadeIn)
-            {
-                screenFadeImage.gameObject.SetActive(true);
-                screenFadeImage.color = new Color(screenFadeImage.color.r, screenFadeImage.color.g, screenFadeImage.color.b, 0);
-                screenFadeImage.DOFade(1f, screenFadeDuration);
-            }
-            else if (screenFade == ScreenFadeType.FadeOut)
-            {
-                screenFadeImage.DOFade(0f, screenFadeDuration).OnComplete(() => screenFadeImage.gameObject.SetActive(false));
+                effectPlayer.PlayScreenFade(screenFade, screenFadeColor ?? Color.black, screenFadeDuration);
             }
         }
     }
@@ -109,10 +87,10 @@ public class DialogueWindow : MonoBehaviour
             float duration = charInterval * (text?.Length ?? 0);
             outsideDialogueTween = outsideDialogueText.DOText(text ?? "", duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(() => { if (onComplete != null) onComplete(); });
         }
-        if (outsideStandingImage != null)
+        if (effectPlayer != null)
         {
-            outsideStandingImage.sprite = standingImage;
-            outsideStandingImage.enabled = standingImage != null;
+            effectPlayer.PlayOutsideStandingEffect(standingImage);
         }
     }
+}
 }

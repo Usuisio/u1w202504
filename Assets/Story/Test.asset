@@ -18,14 +18,12 @@ MonoBehaviour:
     InsideName: "\u30CE\u30EF\uFF1F"
     InsideDialogueText: "\u3075\u3041\u3075\u3041\u3075\u3041\u3075\u3041\u3075\u3041"
     OutsideDialogueText: "\u304C\u3063\u304C\u304C\u304C\u304C\uFF47"
-    StandingImage: {fileID: 0}
+    StandingImage: {fileID: 21300000, guid: 3bbedf6067e02df49a7597090864ba1f, type: 3}
     StandingFade: 0
     StandingFadeDuration: 0.3
     ScreenFade: 0
     ScreenFadeColor: {r: 0, g: 0, b: 0, a: 1}
     ScreenFadeDuration: 0.5
-    SetActiveObjects: []
-    SetActiveValue: 1
   - Id: 0
     Type: 1
     InsideName: "\u30CE\u30EF\uFF1F"
@@ -37,5 +35,3 @@ MonoBehaviour:
     ScreenFade: 0
     ScreenFadeColor: {r: 0, g: 0, b: 0, a: 1}
     ScreenFadeDuration: 0.5
-    SetActiveObjects: []
-    SetActiveValue: 1

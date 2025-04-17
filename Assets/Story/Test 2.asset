@@ -14,7 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   events:
   - Id: 0
-    Type: 0
+    Type: 2
     InsideName: "\u3060\u308C\u304B"
-    InsideDialogueText: "\u3080\u3080\u3080"
-    OutsideDialogueText: "\u308B\u308B\u308B"
+    InsideDialogueText: 
+    OutsideDialogueText: 
+    StandingImage: {fileID: 21300000, guid: 12ffbda482c829e408b78f90ffb25fe5, type: 3}
+    StandingFade: 1
+    StandingFadeDuration: 2
+    ScreenFade: 1
+    ScreenFadeColor: {r: 0, g: 0, b: 0, a: 1}
+    ScreenFadeDuration: 0.5
+  - Id: 1
+    Type: 3
+    InsideName: "\u3060\u308C\u304B"
+    InsideDialogueText: wawwa-ii
+    OutsideDialogueText: 
+    StandingImage: {fileID: 0}
+    StandingFade: 1
+    StandingFadeDuration: 0.3
+    ScreenFade: 2
+    ScreenFadeColor: {r: 0, g: 0, b: 0, a: 1}
+    ScreenFadeDuration: 0.5
