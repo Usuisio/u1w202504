@@ -3,13 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
-using Assets.Scripts.UI;
 
 /// <summary>
 /// テキスト表示＆テキスト送りを管理するクラス
 /// </summary>
-namespace Assets.Scripts.UI
-{
 public class DialogueWindow : MonoBehaviour
 {
     [Header("演出プレイヤー")]
@@ -92,5 +89,4 @@ public class DialogueWindow : MonoBehaviour
             effectPlayer.PlayOutsideStandingEffect(standingImage);
         }
     }
-}
 }

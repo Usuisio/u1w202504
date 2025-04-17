@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts.UI;
 
 /// <summary>
 /// イベント進行・切り替え・セリフ表示指示を担当するコントローラー
