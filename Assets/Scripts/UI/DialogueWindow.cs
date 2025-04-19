@@ -168,7 +168,11 @@ public class DialogueWindow : MonoBehaviour
     {
         if (outsideDialogueImage != null)
         {
-            outsideDialogueImage.gameObject.SetActive(false);
+            // フェードアウト
+            outsideDialogueImage.DOFade(0f, 0.3f).OnComplete(() =>
+            {
+                outsideDialogueImage.gameObject.SetActive(false);
+            });
         }
     }
 
@@ -180,6 +184,7 @@ public class DialogueWindow : MonoBehaviour
         if (outsideDialogueImage != null)
         {
             outsideDialogueImage.gameObject.SetActive(true);
+            outsideDialogueImage.DOFade(1f, 0.3f);
         }
     }
 
@@ -190,7 +195,11 @@ public class DialogueWindow : MonoBehaviour
     {
         if (insideDialogueImage != null)
         {
-            insideDialogueImage.gameObject.SetActive(false);
+            // フェードアウト
+            insideDialogueImage.DOFade(0f, 0.3f).OnComplete(() =>
+            {
+                insideDialogueImage.gameObject.SetActive(false);
+            });
         }
     }
 
@@ -202,6 +211,7 @@ public class DialogueWindow : MonoBehaviour
         if (insideDialogueImage != null)
         {
             insideDialogueImage.gameObject.SetActive(true);
+            insideDialogueImage.DOFade(1f, 0.3f);
         }
     }
 
