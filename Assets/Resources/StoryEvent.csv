@@ -1,29 +1,74 @@
 id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
+,flag,false,常時true,,,,,,,
+
+
+
+
+,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
+,outsideSay,false,選択肢が二つ出てきたけど、どっちにする？\n……まあ、最初は無難な方にしとこうか,KoppeO,,,,,,
+
+
+
+
+
 ,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
-,outsideSay,true,設定は……特に変えなくていいか！スタート！,,,,,,,
+,outsideSay,true,設定は……特に変えなくていいか！スタート！,Koppe,,,,,,
 ,screenfade,false,,out,0.8,,,,,
 ,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
 ,insideSay,true,俺の名前はこっぺ。どこにでもいる高校2年生。▼,,,,,,,
-,insideSay,false,ある日、クラスにすごく綺麗な少女が転校してきた。\n野愛ノワ、というらしい。どんな挨拶をしようか？ ▼,,,,,,,
-2130,ifgoto,false,3001,シーン1初回,,,,,,
+,insideCharaFade,false,Nowa,in,0.5,,,,,
+,insideSay,true,ある日、クラスにすごく綺麗な少女が転校してきた。\n野愛ノワ、というらしい。どんな挨拶をしようか？ ▼,,,,,,,
 
 3030,flag,false,シーン1初回,,,,,,,,シーン1初回フラグ
-3040,outsideSay,false,選択肢が二つ出てきたけど、どっちにする？\n……まあ、最初は無難な方にしとこうか,,,,,,,
+
+3040,outsideSay,false,選択肢が二つ出てきたけど、どっちにする？\n……まあ、最初は無難な方にしとこうか,KoppeO,,,,,,
 3050,choice,true,,,,はじめまして、よろしくね,4001,お慕い申しておりました。王女様,3110,,,
-3110,outsideSay,false,えっ、だから無難な方にしとこうよ,,,,,,,
+3110,outsideSay,false,えっ、だから無難な方にしとこうよ,KoppeWa,,,,,,
 3120,choice,true,,,,はじめまして、よろしくね,4001,お慕い申しておりました。王女様,3210,,,
 
-4001,insideSay,false,「……無礼者が。妾をなんと心得る」,test2,ノワ,,,,,,,,
-,outsideSay,true,は？,,,,,,,
+3210,insideSay,true,彼女は少しだけびっくりしたように固まった後、澄まし顔で言った。,Nowa,,,,,,,,,
+,insideSay,false,「……ふん。苦しゅうない」,,ノワ,,,,,
+,outsideSay,true,あれ？,KoppeO,,,,,,
+,insideCharaFade,false,,out,0.5,,,,,
+,insideSay,true,好感度が10上がった。,,,,,,,
+,outsideSay,true,マジか、こっち正解ルートなのかよ……,KoppeO,,,,,,
+,ifgoto,false,5001,シーン1二回目,,,,,,
+,flag,false,シーン1二回目,,,,,,,,シーン1二回目フラグ
+,outsideSay,true,……なんでわかったんだ？もしかして、このゲーム遊んだことある？,KoppeO,,,,,,
+,outsideSay,true,まあいっか。,Koppe,,,,,,
+,ifgoto,false,5001,シーン1初回,,,,,,
+
+
+
+4001,insideSay,false,「……無礼者が。妾をなんと心得る」,NowaMu,ノワ,,,,,,,,
+,flag,false,シーン1二回目,,,,,,,,シーン1二回目フラグ
+,outsideSay,true,は？,KoppeNu,,,,,,
 ,insideSay,true,「妾は王女ノワ。お前のような下賤な者に挨拶をする義理はない」,,ノワ,,,,,
-,insideSay,true,そう言ってギロリとこちらを睨みつけ、スタスタ去ってしまった。,nowa1,ノワ,,,,,
-,insideSay,false,好感度が999下がった。。,nowa1,ノワ,,,,,,,,
-,outsideSay,true,は？,,,,,,,
+,insideCharaFade,false,,out,0.5,,,,,
+,insideSay,true,そう言ってギロリとこちらを睨みつけ、スタスタ去ってしまった。,,ノワ,,,,,
+,insideSay,false,好感度が999下がった。,,ノワ,,,,,,,,
+,outsideSay,true,は？？？？,KoppeNu,,,,,,
 ,screenfade,false,,in,0.8,,,,,
 ,insideSay,false,ゲームオーバー。,,,,,,,,
-,outsideSay,true,なんっっだよ！このゲーム！！,,,,,,,
+,outsideSay,true,なんっっだよ！このゲーム！！,KoppeIkari,,,,,,
 ,outsideSay,true,フツー選択肢一回ミスっただけでゲームオーバーになるかよ？,,,,,,,
+,outsideSay,true,あーもー腹立つ！やり直しだ！,KoppeNu,,,,,,
+
+
+
+5001,setActive,false,図書室,true,,,,,,,
+,setActive,false,学校,false,,,,,,,,
+,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
+,screenfade,false,,out,2,,,,,
+,insideSay,true,図書委員の友人が、ノワという少女について詳しく教えてくれた。,,,,,,,
+,insideSay,true,なんでも、自分のことを「呪われし王女」と名乗り、常に誰も寄せ付けないオーラを放っているらしい。,,,,,,,
+,insideSay,false,そのため、彼女に近づく者は、皆無。,,,,,,,
+,outsideSay,true,かなりやべーやつ扱いされてるみたいだな……,Koppe,,,,,,
+,insideSay,true,そして、図書室で孤独に本を読んでる様子をよく目にする、とも。,,,,,,,
+,insideSay,true,放課後。そんなことを考えながら、図書室に入ったら、\nちょうど目の前の席でノワが分厚い本を読んでいた。,,,,,,,
+,insideSay,false,今この部屋には、彼女と二人きり。どうする？,,,,,,,
+
 
 
 9,outsideSay,true,これはテスト用の外側セリフです。,,,,,,,
