@@ -8,7 +8,10 @@ using DG.Tweening;
 public class DialogueWindowPartsController : MonoBehaviour
 {
     [Header("外ゲーム用ダイアログ本体のImage（背景や枠など）")]
-    [SerializeField] private Image outsideDialogueImage;
+    [SerializeField] private Image[] outsideDialogueImages;
+
+    [Header("外ゲーム用ダイアログ本体のText（セリフや名前など）")]
+    [SerializeField] private TMPro.TextMeshProUGUI[] outsideDialogueTexts;
 
     [Header("中ゲーム用ダイアログ本体のImage（背景や枠など）")]
     [SerializeField] private Image insideDialogueImage;
@@ -24,12 +27,26 @@ public class DialogueWindowPartsController : MonoBehaviour
     /// </summary>
     public void HideOutsideDialogueImage()
     {
-        if (outsideDialogueImage != null)
+        if (outsideDialogueImages != null)
         {
-            // 即時非表示（Activeは維持）
-            outsideDialogueImage.gameObject.SetActive(true);
-            var c = outsideDialogueImage.color;
-            outsideDialogueImage.color = new Color(c.r, c.g, c.b, 0f);
+            foreach (var img in outsideDialogueImages)
+            {
+                if (img != null)
+                {
+                    img.gameObject.SetActive(true);
+                    img.DOFade(0f, 0.3f);
+                }
+            }
+        }
+        if (outsideDialogueTexts != null)
+        {
+            foreach (var txt in outsideDialogueTexts)
+            {
+                if (txt != null)
+                {
+                    txt.DOFade(0f, 0.3f);
+                }
+            }
         }
     }
 
@@ -38,10 +55,26 @@ public class DialogueWindowPartsController : MonoBehaviour
     /// </summary>
     public void ShowOutsideDialogueImage()
     {
-        if (outsideDialogueImage != null)
+        if (outsideDialogueImages != null)
         {
-            outsideDialogueImage.gameObject.SetActive(true);
-            outsideDialogueImage.DOFade(1f, 0.3f);
+            foreach (var img in outsideDialogueImages)
+            {
+                if (img != null)
+                {
+                    img.gameObject.SetActive(true);
+                    img.DOFade(1f, 0.3f);
+                }
+            }
+        }
+        if (outsideDialogueTexts != null)
+        {
+            foreach (var txt in outsideDialogueTexts)
+            {
+                if (txt != null)
+                {
+                    txt.DOFade(1f, 0.3f);
+                }
+            }
         }
     }
 
