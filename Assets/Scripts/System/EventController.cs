@@ -95,14 +95,11 @@ public class EventController : MonoBehaviour
                     speakerName,
                     ev.content.Replace("\\n", "\n"),
                     ev.isNeedClick,
-                    standingSpriteSay,
-                    StandingFadeType.None,
-                    0.3f,
-                    ScreenFadeType.None,
-                    (Color?)UnityEngine.Color.black,
-                    0.5f,
                     OnEventFinished
                 );
+                // 立ち絵・画面フェード演出
+                dialogueWindow.PlayStandingEffect(standingSpriteSay, StandingFadeType.None, 0.3f);
+                dialogueWindow.PlayScreenFade(ScreenFadeType.None, UnityEngine.Color.black, 0.5f);
                 break;
             case "outsideSay":
                 // arg1: 立ち絵ファイル名
@@ -132,15 +129,10 @@ public class EventController : MonoBehaviour
                 float.TryParse(ev.args[1], out fadeDuration);
                 dialogueWindow.ShowInsideDialogue(
                     null, null, ev.isNeedClick,
-                    null,
-                    StandingFadeType.None,
-                    0.3f,
-                    fadeType,
-                    (Color?)UnityEngine.Color.black,
-                    fadeDuration,
-                    null,
                     !ev.isNeedClick ? OnEventFinished : null
                 );
+                dialogueWindow.PlayStandingEffect(null, StandingFadeType.None, 0.3f);
+                dialogueWindow.PlayScreenFade(fadeType, UnityEngine.Color.black, fadeDuration);
                 break;
             case "insideCharaFade":
                 // content: 立ち絵ファイル名, arg1: in/out, arg2: フェード時間
@@ -159,15 +151,10 @@ public class EventController : MonoBehaviour
                 }
                 dialogueWindow.ShowInsideDialogue(
                     null, null, ev.isNeedClick,
-                    standingSprite,
-                    standingFade,
-                    standingFadeDuration,
-                    ScreenFadeType.None,
-                    (Color?)UnityEngine.Color.black,
-                    0.5f,
-                    null,
                     !ev.isNeedClick ? OnEventFinished : null
                 );
+                dialogueWindow.PlayStandingEffect(standingSprite, standingFade, standingFadeDuration);
+                dialogueWindow.PlayScreenFade(ScreenFadeType.None, UnityEngine.Color.black, 0.5f);
                 break;
             case "setActive":
                 // content: オブジェクトキー名, arg1: "true"/"false"
@@ -303,14 +290,14 @@ public class EventController : MonoBehaviour
             case "OutsideHide":
                 if (dialogueWindow != null)
                 {
-                    dialogueWindow.HideOutsideDialogueImage();
+                    dialogueWindow.partsController.HideOutsideDialogueImage();
                 }
                 OnEventFinished();
                 break;
             case "InsideHide":
                 if (dialogueWindow != null)
                 {
-                    dialogueWindow.HideInsideDialogueImage();
+                    dialogueWindow.partsController.HideInsideDialogueImage();
                 }
                 OnEventFinished();
                 break;

@@ -26,6 +26,9 @@ public class DialogueWindow : MonoBehaviour
     [Header("演出プレイヤー")]
     [SerializeField] private DialogueEffectPlayer effectPlayer;
 
+    [Header("UI部品コントローラー")]
+    [SerializeField] public DialogueWindowPartsController partsController;
+
     [Header("外ゲーム用ダイアログ本体のImage（背景や枠など）")]
     [SerializeField] private Image outsideDialogueImage;
 
@@ -66,17 +69,13 @@ public class DialogueWindow : MonoBehaviour
         string name,
         string text,
         bool isNeedClick = true,
-        Sprite standingImage = null,
-        StandingFadeType standingFade = StandingFadeType.None,
-        float standingFadeDuration = 0.3f,
-        ScreenFadeType screenFade = ScreenFadeType.None,
-        Color? screenFadeColor = null,
-        float screenFadeDuration = 0.5f,
-        System.Action onComplete = null,
-        System.Action onEffectComplete = null)
+        System.Action onComplete = null)
     {
         // ダイアログImageを再表示
-        ShowInsideDialogueImage();
+        if (partsController != null)
+        {
+            partsController.ShowInsideDialogueImage();
+        }
 
         // 話者名
         if (insideNameText != null)
@@ -91,27 +90,45 @@ public class DialogueWindow : MonoBehaviour
             float duration = charInterval * (text?.Length ?? 0);
 
             // メッセージ送り中はインジケータ非表示
-            HideClickWaitIndicator();
+            if (partsController != null)
+            {
+                partsController.HideClickWaitIndicator();
+            }
 
             insideDialogueTween = insideDialogueText.DOText(text ?? "", duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(() =>
             {
                 // メッセージ送り完了でisNeedClickならインジケータ表示
                 if (isNeedClick)
                 {
-                    ShowClickWaitIndicator();
+                    if (partsController != null)
+                    {
+                        partsController.ShowClickWaitIndicator();
+                    }
                     onComplete?.Invoke();
                 }
-                // isNeedClick=falseの場合はeffectPlayer側でOnEventFinishedを呼ぶ
             });
         }
-        // 立ち絵・画面フェード演出
+    }
+
+    /// <summary>
+    /// 立ち絵のフェード演出を再生
+    /// </summary>
+    public void PlayStandingEffect(Sprite standingImage, StandingFadeType standingFade, float standingFadeDuration, System.Action onEffectComplete = null)
+    {
         if (effectPlayer != null)
         {
             effectPlayer.PlayStandingEffect(standingImage, standingFade, standingFadeDuration, onEffectComplete);
-            if (screenFade != ScreenFadeType.None)
-            {
-                effectPlayer.PlayScreenFade(screenFade, screenFadeColor ?? Color.black, screenFadeDuration, onEffectComplete);
-            }
+        }
+    }
+
+    /// <summary>
+    /// 画面フェード演出を再生
+    /// </summary>
+    public void PlayScreenFade(ScreenFadeType screenFade, Color screenFadeColor, float screenFadeDuration, System.Action onEffectComplete = null)
+    {
+        if (effectPlayer != null && screenFade != ScreenFadeType.None)
+        {
+            effectPlayer.PlayScreenFade(screenFade, screenFadeColor, screenFadeDuration, onEffectComplete);
         }
     }
 
@@ -122,7 +139,10 @@ public class DialogueWindow : MonoBehaviour
     public void ShowOutsideDialogue(string text, bool isNeedClick = true, Sprite standingImage = null, System.Action onComplete = null)
     {
         // ダイアログImageを再表示
-        ShowOutsideDialogueImage();
+        if (partsController != null)
+        {
+            partsController.ShowOutsideDialogueImage();
+        }
 
         if (outsideDialogueText != null)
         {
@@ -131,14 +151,20 @@ public class DialogueWindow : MonoBehaviour
             float duration = charInterval * (text?.Length ?? 0);
 
             // メッセージ送り中はインジケータ非表示
-            HideClickWaitIndicator();
+            if (partsController != null)
+            {
+                partsController.HideClickWaitIndicator();
+            }
 
             outsideDialogueTween = outsideDialogueText.DOText(text ?? "", duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(() =>
             {
                 // メッセージ送り完了でisNeedClickならインジケータ表示
                 if (isNeedClick)
                 {
-                    ShowClickWaitIndicator();
+                    if (partsController != null)
+                    {
+                        partsController.ShowClickWaitIndicator();
+                    }
                     onComplete?.Invoke();
                 }
                 // isNeedClick=falseの場合はeffectPlayer側でOnEventFinishedを呼ぶ
@@ -192,101 +218,4 @@ public class DialogueWindow : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 外ゲーム用ダイアログImageを非表示にする
-    /// </summary>
-    public void HideOutsideDialogueImage()
-    {
-        if (outsideDialogueImage != null)
-        {
-            // フェードアウト
-            outsideDialogueImage.DOFade(0f, 0.3f).OnComplete(() =>
-            {
-                outsideDialogueImage.gameObject.SetActive(false);
-            });
-        }
-    }
-
-    /// <summary>
-    /// 外ゲーム用ダイアログImageを表示する
-    /// </summary>
-    public void ShowOutsideDialogueImage()
-    {
-        if (outsideDialogueImage != null)
-        {
-            outsideDialogueImage.gameObject.SetActive(true);
-            outsideDialogueImage.DOFade(1f, 0.3f);
-        }
-    }
-
-    /// <summary>
-    /// 中ゲーム用ダイアログImageを非表示にする
-    /// </summary>
-    public void HideInsideDialogueImage()
-    {
-        if (insideDialogueImage != null)
-        {
-            // フェードアウト
-            insideDialogueImage.DOFade(0f, 0.3f).OnComplete(() =>
-            {
-                insideDialogueImage.gameObject.SetActive(false);
-            });
-        }
-    }
-
-    /// <summary>
-    /// 中ゲーム用ダイアログImageを表示する
-    /// </summary>
-    public void ShowInsideDialogueImage()
-    {
-        if (insideDialogueImage != null)
-        {
-            insideDialogueImage.gameObject.SetActive(true);
-            insideDialogueImage.DOFade(1f, 0.3f);
-        }
-    }
-
-    /// <summary>
-    /// 外側ゲームの立ち絵Imageを非表示にする
-    /// </summary>
-    public void HideOutsideStandingImage()
-    {
-        if (outsideStandingImage != null)
-        {
-            outsideStandingImage.gameObject.SetActive(false);
-        }
-    }
-
-    /// <summary>
-    /// クリック待ち表示用オブジェクトを表示
-    /// </summary>
-    public void ShowClickWaitIndicator()
-    {
-        if (clickWaitIndicator != null)
-        {
-            clickWaitIndicator.SetActive(true);
-        }
-    }
-
-    /// <summary>
-    /// クリック待ち表示用オブジェクトを非表示
-    /// </summary>
-    public void HideClickWaitIndicator()
-    {
-        if (clickWaitIndicator != null)
-        {
-            clickWaitIndicator.SetActive(false);
-        }
-    }
-
-    /// <summary>
-    /// 外側ゲームの立ち絵Imageを表示する
-    /// </summary>
-    public void ShowOutsideStandingImage()
-    {
-        if (outsideStandingImage != null)
-        {
-            outsideStandingImage.gameObject.SetActive(true);
-        }
-    }
 }
