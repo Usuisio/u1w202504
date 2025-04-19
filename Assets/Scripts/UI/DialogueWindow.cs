@@ -42,6 +42,9 @@ public class DialogueWindow : MonoBehaviour
     [SerializeField, Tooltip("1文字あたり何秒かけて表示するか（例: 0.05）")]
     private float charInterval = 0.05f;
 
+    [Header("選択肢ボタン（事前配置、最大3つなど）")]
+    [SerializeField] private List<Button> choiceButtons = new List<Button>();
+
     private DG.Tweening.Tween insideDialogueTween;
     private DG.Tweening.Tween outsideDialogueTween;
 
@@ -101,6 +104,43 @@ public class DialogueWindow : MonoBehaviour
         if (effectPlayer != null)
         {
             effectPlayer.PlayOutsideStandingEffect(standingImage);
+        }
+    }
+
+    /// <summary>
+    /// 選択肢を表示（事前配置ボタンを使い回し）
+    /// </summary>
+    /// <param name="choices">選択肢テキストのリスト</param>
+    /// <param name="onSelect">選択時コールバック（選択肢index）</param>
+    public void ShowChoice(List<string> choices, System.Action<int> onSelect)
+    {
+        for (int i = 0; i < choiceButtons.Count; i++)
+        {
+            if (i < choices.Count)
+            {
+                var btn = choiceButtons[i];
+                btn.gameObject.SetActive(true);
+                var txt = btn.GetComponentInChildren<TextMeshProUGUI>();
+                if (txt != null) txt.text = choices[i];
+                btn.onClick.RemoveAllListeners();
+                int idx = i;
+                btn.onClick.AddListener(() => onSelect?.Invoke(idx));
+            }
+            else
+            {
+                if (choiceButtons[i] != null) choiceButtons[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 選択肢を非表示
+    /// </summary>
+    public void HideChoices()
+    {
+        foreach (var btn in choiceButtons)
+        {
+            if (btn != null) btn.gameObject.SetActive(false);
         }
     }
 }

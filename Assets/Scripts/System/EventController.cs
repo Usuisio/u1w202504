@@ -8,10 +8,15 @@ public class EventController : MonoBehaviour
 {
     [SerializeField] private DialogueWindow dialogueWindow;
     [SerializeField] private SetActiveManager setActiveManager;
+    [SerializeField] private FlagManager flagManager;
 
     // CSVから読み込んだストーリーイベントリスト
     private List<StoryEventCsvLoader.StoryEventRow> storyEvents = new List<StoryEventCsvLoader.StoryEventRow>();
     private int currentEventIndex = 0;
+
+    // 直前の立ち絵・話者名
+    private Sprite lastStandingSprite = null;
+    private string lastSpeakerName = "";
 
     private void Start()
     {
@@ -47,11 +52,25 @@ public class EventController : MonoBehaviour
             case "insideSay":
                 // arg1: 立ち絵ファイル名, arg2: 話者名
                 // content: セリフ
-                // TODO: SpriteManagerからスプライト取得
+                // 立ち絵
+                Sprite standingSpriteSay = lastStandingSprite;
+                if (!string.IsNullOrEmpty(ev.args[0]))
+                {
+                    var s = Resources.Load<Sprite>(ev.args[0]);
+                    if (s != null) lastStandingSprite = s;
+                    standingSpriteSay = s ?? lastStandingSprite;
+                }
+                // 話者名
+                string speakerName = lastSpeakerName;
+                if (!string.IsNullOrEmpty(ev.args[1]))
+                {
+                    lastSpeakerName = ev.args[1];
+                    speakerName = ev.args[1];
+                }
                 dialogueWindow.ShowInsideDialogue(
-                    ev.args[1], // 話者名
+                    speakerName,
                     ev.content.Replace("\\n", "\n"),
-                    null, // 立ち絵スプライト（仮）
+                    standingSpriteSay,
                     StandingFadeType.None,
                     0.3f,
                     ScreenFadeType.None,
@@ -63,9 +82,16 @@ public class EventController : MonoBehaviour
             case "outsideSay":
                 // arg1: 立ち絵ファイル名
                 // content: セリフ
+                Sprite standingSpriteOut = lastStandingSprite;
+                if (!string.IsNullOrEmpty(ev.args[0]))
+                {
+                    var s = Resources.Load<Sprite>(ev.args[0]);
+                    if (s != null) lastStandingSprite = s;
+                    standingSpriteOut = s ?? lastStandingSprite;
+                }
                 dialogueWindow.ShowOutsideDialogue(
                     ev.content.Replace("\\n", "\n"),
-                    null, // 立ち絵スプライト（仮）
+                    standingSpriteOut,
                     OnEventFinished
                 );
                 break;
@@ -123,6 +149,90 @@ public class EventController : MonoBehaviour
                 }
                 OnEventFinished();
                 break;
+            case "flag":
+                // content: フラグ名
+                if (flagManager != null && !string.IsNullOrEmpty(ev.content))
+                {
+                    flagManager.SetFlag(ev.content);
+                }
+                else
+                {
+                    Debug.LogWarning($"flag: content(フラグ名)が空、またはFlagManager未設定");
+                }
+                OnEventFinished();
+                break;
+            case "ifgoto":
+                // content: ジャンプ先id, arg1: フラグ名
+                if (flagManager != null && !string.IsNullOrEmpty(ev.content) && !string.IsNullOrEmpty(ev.args[0]))
+                {
+                    if (flagManager.HasFlag(ev.args[0]))
+                    {
+                        // ジャンプ先idを探す
+                        int jumpId = 0;
+                        int.TryParse(ev.content, out jumpId);
+                        int idx = storyEvents.FindIndex(e => e.id == jumpId);
+                        if (idx >= 0)
+                        {
+                            currentEventIndex = idx;
+                            PlayCurrentEvent();
+                            return;
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"ifgoto: ジャンプ先id {jumpId} が見つかりません");
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"ifgoto: content(ジャンプ先id)またはarg1(フラグ名)が空、またはFlagManager未設定");
+                }
+                OnEventFinished();
+                break;
+            case "choice":
+                // arg1,2,3,4,5,6: テキスト,ジャンプ先idペア
+                var choices = new List<string>();
+                var jumpIds = new List<int>();
+                for (int i = 0; i < 6; i += 2)
+                {
+                    string text = ev.args[i];
+                    string idStr = (i + 1 < ev.args.Length) ? ev.args[i + 1] : "";
+                    if (!string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(idStr) && int.TryParse(idStr, out int jumpId))
+                    {
+                        choices.Add(text);
+                        jumpIds.Add(jumpId);
+                    }
+                }
+                if (choices.Count > 0)
+                {
+                    dialogueWindow.ShowChoice(choices, (selectedIdx) =>
+                    {
+                        dialogueWindow.HideChoices();
+                        if (selectedIdx >= 0 && selectedIdx < jumpIds.Count)
+                        {
+                            int idx = storyEvents.FindIndex(e => e.id == jumpIds[selectedIdx]);
+                            if (idx >= 0)
+                            {
+                                currentEventIndex = idx;
+                                PlayCurrentEvent();
+                                return;
+                            }
+                        }
+                        OnEventFinished();
+                    });
+                }
+                else
+                {
+                    Debug.LogWarning("choice: 有効な選択肢がありません");
+                    OnEventFinished();
+                }
+                break;
+            case "wait":
+                // arg1: 待機秒数
+                float waitSec = 1.0f;
+                float.TryParse(ev.args[0], out waitSec);
+                StartCoroutine(WaitAndFinish(waitSec));
+                break;
             // 他typeも必要に応じて追加
             default:
                 OnEventFinished();
@@ -157,5 +267,11 @@ public class EventController : MonoBehaviour
                 AdvanceEvent();
             }
         }
+    }
+
+    private System.Collections.IEnumerator WaitAndFinish(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        OnEventFinished();
     }
 }
