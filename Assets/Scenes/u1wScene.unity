@@ -432,7 +432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   insideStandingImage: {fileID: 598593851}
-  outsideStandingImage: {fileID: 0}
+  outsideStandingImage: {fileID: 842950801}
   screenFadeImage: {fileID: 1515112747}
 --- !u!4 &318158897
 Transform:
@@ -640,7 +640,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3bbedf6067e02df49a7597090864ba1f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 12ffbda482c829e408b78f90ffb25fe5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1305,7 +1305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.56078434}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1352,10 +1352,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueWindow: {fileID: 1695482857}
-  eventGroups:
-  - {fileID: 11400000, guid: 3fe6b20e45146ca45b62c038fc998090, type: 2}
-  - {fileID: 11400000, guid: ca19435d9dedb474d83350182201254a, type: 2}
-  - {fileID: 11400000, guid: acb806c4c6d4ae84db2d613d3ae9ceaa, type: 2}
 --- !u!4 &1543673949
 Transform:
   m_ObjectHideFlags: 0

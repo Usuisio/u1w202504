@@ -46,7 +46,12 @@ public class DialogueEffectPlayer : MonoBehaviour
     /// </summary>
     public void PlayScreenFade(ScreenFadeType fadeType, Color color, float duration)
     {
-        if (screenFadeImage == null) return;
+        Debug.Log($"[DialogueEffectPlayer] PlayScreenFade: type={fadeType}, color={color}, duration={duration}, image={screenFadeImage}");
+        if (screenFadeImage == null)
+        {
+            Debug.LogWarning("[DialogueEffectPlayer] screenFadeImageがInspectorでセットされていません！");
+            return;
+        }
         screenFadeImage.color = color;
         if (fadeType == ScreenFadeType.FadeIn)
         {

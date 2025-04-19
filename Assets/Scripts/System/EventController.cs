@@ -8,91 +8,139 @@ public class EventController : MonoBehaviour
 {
     [SerializeField] private DialogueWindow dialogueWindow;
 
-    // ScriptableObjectで管理するイベントグループリスト
-    [SerializeField]
-    private List<EventGroup> eventGroups = new List<EventGroup>();
-    private int currentGroupIndex = 0;
+    // CSVから読み込んだストーリーイベントリスト
+    private List<StoryEventCsvLoader.StoryEventRow> storyEvents = new List<StoryEventCsvLoader.StoryEventRow>();
+    private int currentEventIndex = 0;
 
     private void Start()
     {
-        PlayCurrentGroup();
+        // Resources/StoryEvent.csv を読み込む（Resources/StoryEvent というパスになる想定）
+        storyEvents = StoryEventCsvLoader.Load("StoryEvent");
+        currentEventIndex = 0;
+        if (storyEvents == null || storyEvents.Count == 0)
+        {
+            Debug.LogError("StoryEvent.csvの読み込みに失敗、またはイベントが0件です。パス・カラム数・内容を確認してください。");
+        }
+        PlayCurrentEvent();
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
-            AdvanceGroup();
+            AdvanceEvent();
         }
     }
 
-    private void PlayCurrentGroup()
+    /// <summary>
+    /// 現在のイベントを再生
+    /// </summary>
+    private void PlayCurrentEvent()
     {
-        if (currentGroupIndex < 0 || currentGroupIndex >= eventGroups.Count) return;
-        var groupAsset = eventGroups[currentGroupIndex];
-        if (groupAsset == null || groupAsset.events == null || groupAsset.events.Count == 0) return;
-        PlayEventSequence(groupAsset.events, 0);
-    }
+        if (currentEventIndex < 0 || currentEventIndex >= storyEvents.Count) return;
+        var ev = storyEvents[currentEventIndex];
 
-    // group内のeventListを順番に再生
-    private void PlayEventSequence(List<EventData> group, int idx)
-    {
-        if (idx >= group.Count) return;
-        var ev = group[idx];
-        switch (ev.Type)
+        // typeごとに分岐
+        switch (ev.type)
         {
-            case EventType.InsideGameDialogue:
+            case "insideSay":
+                // arg1: 立ち絵ファイル名, arg2: 話者名
+                // content: セリフ
+                // TODO: SpriteManagerからスプライト取得
                 dialogueWindow.ShowInsideDialogue(
-                    ev.InsideName,
-                    ev.InsideDialogueText,
-                    ev.StandingImage,
+                    ev.args[1], // 話者名
+                    ev.content.Replace("\\n", "\n"),
+                    null, // 立ち絵スプライト（仮）
                     StandingFadeType.None,
                     0.3f,
                     ScreenFadeType.None,
-                    Color.black,
+                    (Color?)UnityEngine.Color.black,
                     0.5f,
-                    () => PlayEventSequence(group, idx + 1)
+                    OnEventFinished
                 );
                 break;
-            case EventType.OutsideGameDialogue:
-                dialogueWindow.ShowOutsideDialogue(ev.OutsideDialogueText, ev.StandingImage, () => PlayEventSequence(group, idx + 1));
-                break;
-            case EventType.StandingFade:
-                dialogueWindow.ShowInsideDialogue(
-                    null, null, ev.StandingImage,
-                    ev.StandingFade,
-                    ev.StandingFadeDuration,
-                    ScreenFadeType.None,
-                    Color.black,
-                    0.5f,
-                    () => PlayEventSequence(group, idx + 1)
+            case "outsideSay":
+                // arg1: 立ち絵ファイル名
+                // content: セリフ
+                dialogueWindow.ShowOutsideDialogue(
+                    ev.content.Replace("\\n", "\n"),
+                    null, // 立ち絵スプライト（仮）
+                    OnEventFinished
                 );
                 break;
-            case EventType.ScreenFade:
+            case "screenfade":
+                // content: 対象スクリーン名（未使用）, arg1: in/out, arg2: フェード時間
+                var fadeType = ev.args[0] == "in" ? ScreenFadeType.FadeIn : ScreenFadeType.FadeOut;
+                float fadeDuration = 0.5f;
+                float.TryParse(ev.args[1], out fadeDuration);
                 dialogueWindow.ShowInsideDialogue(
                     null, null, null,
                     StandingFadeType.None,
                     0.3f,
-                    ev.ScreenFade,
-                    ev.ScreenFadeColor,
-                    ev.ScreenFadeDuration,
-                    () => PlayEventSequence(group, idx + 1)
+                    fadeType,
+                    (Color?)UnityEngine.Color.black,
+                    fadeDuration,
+                    OnEventFinished
                 );
                 break;
-            // SetActiveイベントは削除
+            case "insideCharaFade":
+                // content: 立ち絵ファイル名, arg1: in/out, arg2: フェード時間
+                var standingFade = ev.args[0] == "in" ? StandingFadeType.FadeIn : StandingFadeType.FadeOut;
+                float standingFadeDuration = 0.3f;
+                float.TryParse(ev.args[1], out standingFadeDuration);
+                Sprite standingSprite = null;
+                if (!string.IsNullOrEmpty(ev.content))
+                {
+                    // 例: content="nowa1" → Resources/nowa1 からロード
+                    standingSprite = Resources.Load<Sprite>(ev.content);
+                    if (standingSprite == null)
+                    {
+                        Debug.LogWarning($"立ち絵スプライトが見つかりません: {ev.content}");
+                    }
+                }
+                dialogueWindow.ShowInsideDialogue(
+                    null, null, standingSprite,
+                    standingFade,
+                    standingFadeDuration,
+                    ScreenFadeType.None,
+                    (Color?)UnityEngine.Color.black,
+                    0.5f,
+                    OnEventFinished
+                );
+                break;
+            // 他typeも必要に応じて追加
             default:
-                PlayEventSequence(group, idx + 1);
+                OnEventFinished();
                 break;
         }
     }
 
-    private void AdvanceGroup()
+    /// <summary>
+    /// 次のイベントへ進む
+    /// </summary>
+    private void AdvanceEvent()
     {
-        currentGroupIndex++;
-        if (currentGroupIndex < eventGroups.Count)
+        currentEventIndex++;
+        if (currentEventIndex < storyEvents.Count)
         {
-            PlayCurrentGroup();
+            PlayCurrentEvent();
         }
         // 末尾なら何もしない
+    }
+
+    /// <summary>
+    /// イベント終了時コールバック
+    /// </summary>
+    private void OnEventFinished()
+    {
+        // isNeedClickがfalseなら自動でAdvanceEvent
+        if (currentEventIndex < storyEvents.Count)
+        {
+            var ev = storyEvents[currentEventIndex];
+            if (!ev.isNeedClick)
+            {
+                AdvanceEvent();
+            }
+        }
     }
 }

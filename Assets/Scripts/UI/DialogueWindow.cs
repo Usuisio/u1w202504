@@ -4,6 +4,20 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 
+public enum StandingFadeType
+{
+    None,
+    FadeIn,
+    FadeOut
+}
+
+public enum ScreenFadeType
+{
+    None,
+    FadeIn,
+    FadeOut
+}
+
 /// <summary>
 /// テキスト表示＆テキスト送りを管理するクラス
 /// </summary>
