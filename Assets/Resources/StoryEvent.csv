@@ -1,6 +1,8 @@
 id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
+2009,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
 2011,outsideSay,true,設定は……特に変えなくていいか！スタート！,,,,,,,
+2021,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
 2110,insideSay,true,俺の名前はこっぺ。どこにでもいる高校2年生。▼,,,,,,,
 2120,insideSay,false,ある日、クラスにすごく綺麗な少女が転校してきた。\n野愛ノワ、というらしい。どんな挨拶をしようか？ ▼,,,,,,,
 2130,ifgoto,false,3001,シーン1初回,,,,,,

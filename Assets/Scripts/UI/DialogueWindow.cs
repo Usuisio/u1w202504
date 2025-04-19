@@ -26,6 +26,12 @@ public class DialogueWindow : MonoBehaviour
     [Header("演出プレイヤー")]
     [SerializeField] private DialogueEffectPlayer effectPlayer;
 
+    [Header("外ゲーム用ダイアログ本体のImage（背景や枠など）")]
+    [SerializeField] private Image outsideDialogueImage;
+
+    [Header("中ゲーム用ダイアログ本体のImage（背景や枠など）")]
+    [SerializeField] private Image insideDialogueImage;
+
     [Header("外側ゲームの立ち絵")]
     [SerializeField] private Image outsideStandingImage;
 
@@ -64,6 +70,9 @@ public class DialogueWindow : MonoBehaviour
         float screenFadeDuration = 0.5f,
         System.Action onComplete = null)
     {
+        // ダイアログImageを再表示
+        ShowInsideDialogueImage();
+
         // 話者名
         if (insideNameText != null)
         {
@@ -94,6 +103,9 @@ public class DialogueWindow : MonoBehaviour
     /// <param name="text">表示するテキスト</param>
     public void ShowOutsideDialogue(string text, Sprite standingImage = null, System.Action onComplete = null)
     {
+        // ダイアログImageを再表示
+        ShowOutsideDialogueImage();
+
         if (outsideDialogueText != null)
         {
             if (outsideDialogueTween != null) outsideDialogueTween.Kill();
@@ -104,6 +116,11 @@ public class DialogueWindow : MonoBehaviour
         if (effectPlayer != null)
         {
             effectPlayer.PlayOutsideStandingEffect(standingImage);
+        }
+        // OutsideStandingImageが非表示なら再表示
+        if (outsideStandingImage != null && !outsideStandingImage.gameObject.activeSelf)
+        {
+            outsideStandingImage.gameObject.SetActive(true);
         }
     }
 
@@ -141,6 +158,72 @@ public class DialogueWindow : MonoBehaviour
         foreach (var btn in choiceButtons)
         {
             if (btn != null) btn.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// 外ゲーム用ダイアログImageを非表示にする
+    /// </summary>
+    public void HideOutsideDialogueImage()
+    {
+        if (outsideDialogueImage != null)
+        {
+            outsideDialogueImage.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// 外ゲーム用ダイアログImageを表示する
+    /// </summary>
+    public void ShowOutsideDialogueImage()
+    {
+        if (outsideDialogueImage != null)
+        {
+            outsideDialogueImage.gameObject.SetActive(true);
+        }
+    }
+
+    /// <summary>
+    /// 中ゲーム用ダイアログImageを非表示にする
+    /// </summary>
+    public void HideInsideDialogueImage()
+    {
+        if (insideDialogueImage != null)
+        {
+            insideDialogueImage.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// 中ゲーム用ダイアログImageを表示する
+    /// </summary>
+    public void ShowInsideDialogueImage()
+    {
+        if (insideDialogueImage != null)
+        {
+            insideDialogueImage.gameObject.SetActive(true);
+        }
+    }
+
+    /// <summary>
+    /// 外側ゲームの立ち絵Imageを非表示にする
+    /// </summary>
+    public void HideOutsideStandingImage()
+    {
+        if (outsideStandingImage != null)
+        {
+            outsideStandingImage.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// 外側ゲームの立ち絵Imageを表示する
+    /// </summary>
+    public void ShowOutsideStandingImage()
+    {
+        if (outsideStandingImage != null)
+        {
+            outsideStandingImage.gameObject.SetActive(true);
         }
     }
 }

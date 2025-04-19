@@ -281,6 +281,20 @@ public class EventController : MonoBehaviour
                 StartCoroutine(WaitAndFinish(waitSec));
                 break;
             // 他typeも必要に応じて追加
+            case "OutsideHide":
+                if (dialogueWindow != null)
+                {
+                    dialogueWindow.HideOutsideDialogueImage();
+                }
+                OnEventFinished();
+                break;
+            case "InsideHide":
+                if (dialogueWindow != null)
+                {
+                    dialogueWindow.HideInsideDialogueImage();
+                }
+                OnEventFinished();
+                break;
             default:
                 OnEventFinished();
                 break;
