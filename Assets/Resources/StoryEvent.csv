@@ -5,10 +5,6 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 
 
-,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
-,outsideSay,false,選択肢が二つ出てきたけど、どっちにする？\n……まあ、最初は無難な方にしとこうか,KoppeO,,,,,,
-
-
 
 
 
@@ -57,10 +53,12 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 
 
-5001,setActive,false,図書室,true,,,,,,,
+5001,screenfade,false,,in,0.5,,,,,
+,wait,false,0.5,,,,,,,,,
+,setActive,false,図書室,true,,,,,,,
 ,setActive,false,学校,false,,,,,,,,
 ,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
-,screenfade,false,,out,2,,,,,
+,screenfade,false,,out,1,,,,,
 ,insideSay,true,図書委員の友人が、ノワという少女について詳しく教えてくれた。,,,,,,,
 ,insideSay,true,なんでも、自分のことを「呪われし王女」と名乗り、常に誰も寄せ付けないオーラを放っているらしい。,,,,,,,
 ,insideSay,false,そのため、彼女に近づく者は、皆無。,,,,,,,

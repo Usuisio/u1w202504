@@ -72,7 +72,6 @@ public class DialogueEffectPlayer : MonoBehaviour
         {
             screenFadeImage.DOFade(0f, duration).OnComplete(() =>
             {
-                screenFadeImage.gameObject.SetActive(false);
                 onComplete?.Invoke();
             });
         }

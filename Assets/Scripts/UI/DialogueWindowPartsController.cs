@@ -26,11 +26,10 @@ public class DialogueWindowPartsController : MonoBehaviour
     {
         if (outsideDialogueImage != null)
         {
-            // フェードアウト
-            outsideDialogueImage.DOFade(0f, 0.3f).OnComplete(() =>
-            {
-                outsideDialogueImage.gameObject.SetActive(false);
-            });
+            // 即時非表示（Activeは維持）
+            outsideDialogueImage.gameObject.SetActive(true);
+            var c = outsideDialogueImage.color;
+            outsideDialogueImage.color = new Color(c.r, c.g, c.b, 0f);
         }
     }
 
@@ -53,11 +52,8 @@ public class DialogueWindowPartsController : MonoBehaviour
     {
         if (insideDialogueImage != null)
         {
-            // フェードアウト
-            insideDialogueImage.DOFade(0f, 0.3f).OnComplete(() =>
-            {
-                insideDialogueImage.gameObject.SetActive(false);
-            });
+            // フェードアウトのみ（Activeは維持）
+            insideDialogueImage.DOFade(0f, 0.3f);
         }
     }
 
