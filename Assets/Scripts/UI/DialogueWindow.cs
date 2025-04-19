@@ -95,18 +95,17 @@ public class DialogueWindow : MonoBehaviour
                 partsController.HideClickWaitIndicator();
             }
 
-            insideDialogueTween = insideDialogueText.DOText(text ?? "", duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(() =>
-            {
-                // メッセージ送り完了でisNeedClickならインジケータ表示
-                if (isNeedClick)
-                {
-                    if (partsController != null)
-                    {
-                        partsController.ShowClickWaitIndicator();
-                    }
-                    onComplete?.Invoke();
-                }
-            });
+insideDialogueTween = insideDialogueText.DOText(text ?? "", duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(() =>
+{
+    if (isNeedClick)
+    {
+        if (partsController != null)
+        {
+            partsController.ShowClickWaitIndicator();
+        }
+    }
+    onComplete?.Invoke();
+});
         }
     }
 
@@ -156,19 +155,17 @@ public class DialogueWindow : MonoBehaviour
                 partsController.HideClickWaitIndicator();
             }
 
-            outsideDialogueTween = outsideDialogueText.DOText(text ?? "", duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(() =>
-            {
-                // メッセージ送り完了でisNeedClickならインジケータ表示
-                if (isNeedClick)
-                {
-                    if (partsController != null)
-                    {
-                        partsController.ShowClickWaitIndicator();
-                    }
-                    onComplete?.Invoke();
-                }
-                // isNeedClick=falseの場合はeffectPlayer側でOnEventFinishedを呼ぶ
-            });
+outsideDialogueTween = outsideDialogueText.DOText(text ?? "", duration).SetEase(DG.Tweening.Ease.Linear).OnComplete(() =>
+{
+    if (isNeedClick)
+    {
+        if (partsController != null)
+        {
+            partsController.ShowClickWaitIndicator();
+        }
+    }
+    onComplete?.Invoke();
+});
         }
         if (effectPlayer != null)
         {
