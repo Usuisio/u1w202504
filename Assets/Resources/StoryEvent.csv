@@ -1,7 +1,9 @@
 id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
+11,setActive,true,図書室,true,,,,,,,testObjを表示
+12,setActive,true,公園昼,false,,,,,,,testObjを非表示
 13,screenfade,true,,out,0.8,,,,,画面フェードアウト
-14,screenfade,true,,in,0.8,,,,,画面フェードイン
 15,insideCharaFade,true,nowa1,in,0.5,,,,,立ち絵フェードイン
 1001,insideSay,true,これはテスト用の内側セリフです。,nowa1,ノワ,,,,,テスト1
 1002,outsideSay,true,これはテスト用の外側セリフです。,koppe1,,,,,,テスト2
 1003,insideSay,false,クリック不要の内側セリフ（自動で次へ進む）,nowa1,ノワ,,,,,テスト3
+1004,outsideSay,false,クリック不要の外側セリフ（自動で次へ進む）,koppe1,,,,,,テスト4

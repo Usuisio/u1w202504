@@ -7,6 +7,7 @@ using UnityEngine;
 public class EventController : MonoBehaviour
 {
     [SerializeField] private DialogueWindow dialogueWindow;
+    [SerializeField] private SetActiveManager setActiveManager;
 
     // CSVから読み込んだストーリーイベントリスト
     private List<StoryEventCsvLoader.StoryEventRow> storyEvents = new List<StoryEventCsvLoader.StoryEventRow>();
@@ -107,6 +108,20 @@ public class EventController : MonoBehaviour
                     0.5f,
                     OnEventFinished
                 );
+                break;
+            case "setActive":
+                // content: オブジェクトキー名, arg1: "true"/"false"
+                bool active = false;
+                bool.TryParse(ev.args[0], out active);
+                if (setActiveManager != null && !string.IsNullOrEmpty(ev.content))
+                {
+                    setActiveManager.SetActiveByKey(ev.content, active);
+                }
+                else
+                {
+                    Debug.LogWarning($"setActive: content(キー名)が空、またはSetActiveManager未設定");
+                }
+                OnEventFinished();
                 break;
             // 他typeも必要に応じて追加
             default:

@@ -12,6 +12,7 @@ type：enum、ストーリーイベントの種類を示す。種類は以下の
     insideCharaFade ゲーム内の立ち絵をフェードイン/アウトする
     setActive 特定のオブジェクトの表示非表示を切り替える
     ifgoto 特定のflagがtrueなら、指定したidにジャンプする
+    wait 待機する
 
 content：イベントの内容についての情報を記載
 
@@ -23,6 +24,7 @@ content：イベントの内容についての情報を記載
     insideCharaFade：対象にしたいキャラの立ち絵のファイル名を指定。たとえば、chara1.pngなら「chara1」を指定。立ち絵のスプライトはSpriteManagerを使って管理する。
     setActive：Activeにしたいオブジェクト名を指定。オブジェクト名と対象オブジェクトの紐づけはActiveManagerを使って管理する。
     ifgoto：ジャンプ先のidを指定
+    wait 待機する秒数
 
 arg1-6：イベントに必要な引数を記載。引数の数はイベントの種類によって異なるため、必要なものだけを記載する。
 
