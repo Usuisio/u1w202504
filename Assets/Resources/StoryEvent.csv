@@ -1,7 +1,8 @@
 id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
-2009,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
+,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
 ,outsideSay,true,設定は……特に変えなくていいか！スタート！,,,,,,,
+,screenfade,false,,out,0.8,,,,,
 ,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
 ,insideSay,true,俺の名前はこっぺ。どこにでもいる高校2年生。▼,,,,,,,
 ,insideSay,false,ある日、クラスにすごく綺麗な少女が転校してきた。\n野愛ノワ、というらしい。どんな挨拶をしようか？ ▼,,,,,,,
@@ -9,22 +10,33 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 3030,flag,false,シーン1初回,,,,,,,,シーン1初回フラグ
 3040,outsideSay,false,選択肢が二つ出てきたけど、どっちにする？\n……まあ、最初は無難な方にしとこうか,,,,,,,
-3050,choice,true,,,,はじめまして、よろしくね,4001,お慕い申しておりました。王女様,3110,,,choiceテスト
+3050,choice,true,,,,はじめまして、よろしくね,4001,お慕い申しておりました。王女様,3110,,,
 3110,outsideSay,false,えっ、だから無難な方にしとこうよ,,,,,,,
-3120,choice,true,,,,はじめまして、よろしくね,4001,お慕い申しておりました。王女様,3210,,,choiceテスト
+3120,choice,true,,,,はじめまして、よろしくね,4001,お慕い申しておりました。王女様,3210,,,
 
-9,outsideSay,true,これはテスト用の外側セリフです。,,,,,,,テスト0
-10,screenfade,false,,in,0.8,,,,,画面フェードイン
+4001,insideSay,false,「……無礼者が。妾をなんと心得る」,test2,ノワ,,,,,,,,
+,outsideSay,true,は？,,,,,,,
+,insideSay,true,「妾は王女ノワ。お前のような下賤な者に挨拶をする義理はない」,,ノワ,,,,,
+,insideSay,true,そう言ってギロリとこちらを睨みつけ、スタスタ去ってしまった。,nowa1,ノワ,,,,,
+,insideSay,false,好感度が999下がった。。,nowa1,ノワ,,,,,,,,
+,outsideSay,true,は？,,,,,,,
+,screenfade,false,,in,0.8,,,,,
+,insideSay,false,ゲームオーバー。,,,,,,,,
+,outsideSay,true,なんっっだよ！このゲーム！！,,,,,,,
+,outsideSay,true,フツー選択肢一回ミスっただけでゲームオーバーになるかよ？,,,,,,,
+
+
+9,outsideSay,true,これはテスト用の外側セリフです。,,,,,,,
+10,screenfade,false,,in,0.8,,,,,
 11,setActive,false,図書室,true,,,,,,,testObjを表示
 12,setActive,false,公園昼,false,,,,,,,testObjを非表示
-13,screenfade,true,,out,0.8,,,,,画面フェードアウト
-15,insideCharaFade,true,nowa1,in,0.5,,,,,立ち絵フェードイン
+13,screenfade,true,,out,0.8,,,,,
+15,insideCharaFade,true,nowa1,in,0.5,,,,,
 16,flag,false,testFlag,,,,,,,,testFlagをON
-8,choice,true,,,,はい,1001,いいえ,1004,,,choiceテスト
+8,choice,true,,,,はい,1001,いいえ,1004,,,
 17,ifgoto,false,1004,testFlag,,,,,,,testFlagがONならid=1004にジャンプ
-1001,insideSay,true,はいを選択している場合このメッセージ,nowa1,ノワ,,,,,テスト1
-1002,outsideSay,true,これはテスト用の外側セリフです。,koppe1,,,,,,テスト2
-1003,insideSay,false,クリック不要の内側セリフ（自動で次へ進む）,nowa1,ノワ,,,,,テスト3
-1004,outsideSay,true,２２,koppe1,,,,,,テスト4
-1005,outsideSay,true,３３３３３３,koppe1,,,,,,テスト4
-,insideSay,true,ID省略サンプル：この行はID未記入でOKです。,,,,,,,ID省略テスト
+1001,insideSay,true,はいを選択している場合このメッセージ,nowa1,ノワ,,,,,
+1002,outsideSay,true,これはテスト用の外側セリフです。,koppe1,,,,,,
+1003,insideSay,false,クリック不要の内側セリフ（自動で次へ進む）,nowa1,ノワ,,,,,
+1004,outsideSay,true,２２,koppe1,,,,,,
+1005,outsideSay,true,３３３３３３,koppe1,,,,,,

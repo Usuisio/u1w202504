@@ -19,9 +19,13 @@ public class DialogueEffectPlayer : MonoBehaviour
     /// <summary>
     /// 立ち絵の表示・フェード
     /// </summary>
-    public void PlayStandingEffect(Sprite standingImage, StandingFadeType fadeType, float fadeDuration)
+    public void PlayStandingEffect(Sprite standingImage, StandingFadeType fadeType, float fadeDuration, System.Action onComplete = null)
     {
-        if (insideStandingImage == null) return;
+        if (insideStandingImage == null)
+        {
+            onComplete?.Invoke();
+            return;
+        }
 
         // 画像が指定されている場合のみ差し替え
         if (standingImage != null)
@@ -33,23 +37,28 @@ public class DialogueEffectPlayer : MonoBehaviour
         if (fadeType == StandingFadeType.FadeIn)
         {
             insideStandingImage.color = new Color(1, 1, 1, 0);
-            insideStandingImage.DOFade(1f, fadeDuration);
+            insideStandingImage.DOFade(1f, fadeDuration).OnComplete(() => onComplete?.Invoke());
         }
         else if (fadeType == StandingFadeType.FadeOut)
         {
-            insideStandingImage.DOFade(0f, fadeDuration);
+            insideStandingImage.DOFade(0f, fadeDuration).OnComplete(() => onComplete?.Invoke());
+        }
+        else
+        {
+            onComplete?.Invoke();
         }
     }
 
     /// <summary>
     /// 画面全体のフェード
     /// </summary>
-    public void PlayScreenFade(ScreenFadeType fadeType, Color color, float duration)
+    public void PlayScreenFade(ScreenFadeType fadeType, Color color, float duration, System.Action onComplete = null)
     {
         Debug.Log($"[DialogueEffectPlayer] PlayScreenFade: type={fadeType}, color={color}, duration={duration}, image={screenFadeImage}");
         if (screenFadeImage == null)
         {
             Debug.LogWarning("[DialogueEffectPlayer] screenFadeImageがInspectorでセットされていません！");
+            onComplete?.Invoke();
             return;
         }
         screenFadeImage.color = color;
@@ -57,11 +66,19 @@ public class DialogueEffectPlayer : MonoBehaviour
         {
             screenFadeImage.gameObject.SetActive(true);
             screenFadeImage.color = new Color(color.r, color.g, color.b, 0);
-            screenFadeImage.DOFade(1f, duration);
+            screenFadeImage.DOFade(1f, duration).OnComplete(() => onComplete?.Invoke());
         }
         else if (fadeType == ScreenFadeType.FadeOut)
         {
-            screenFadeImage.DOFade(0f, duration).OnComplete(() => screenFadeImage.gameObject.SetActive(false));
+            screenFadeImage.DOFade(0f, duration).OnComplete(() =>
+            {
+                screenFadeImage.gameObject.SetActive(false);
+                onComplete?.Invoke();
+            });
+        }
+        else
+        {
+            onComplete?.Invoke();
         }
     }
     /// <summary>

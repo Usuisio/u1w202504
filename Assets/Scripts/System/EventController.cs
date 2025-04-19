@@ -68,13 +68,17 @@ public class EventController : MonoBehaviour
                 // arg1: 立ち絵ファイル名, arg2: 話者名
                 // content: セリフ
                 // 立ち絵
-                Sprite standingSpriteSay = lastStandingSprite;
+                Sprite standingSpriteSay = null;
                 if (!string.IsNullOrEmpty(ev.args[0]))
                 {
                     var s = Resources.Load<Sprite>(ev.args[0]);
-                    if (s != null) lastStandingSprite = s;
-                    standingSpriteSay = s ?? lastStandingSprite;
+                    if (s != null)
+                    {
+                        standingSpriteSay = s;
+                        lastStandingSprite = s;
+                    }
                 }
+                // arg1が空の場合はstandingSpriteSay=null, lastStandingSpriteも更新しない
                 // 話者名
                 string speakerName = lastSpeakerName;
                 if (!string.IsNullOrEmpty(ev.args[1]))
@@ -82,9 +86,15 @@ public class EventController : MonoBehaviour
                     lastSpeakerName = ev.args[1];
                     speakerName = ev.args[1];
                 }
+                else
+                {
+                    lastSpeakerName = "";
+                    speakerName = "";
+                }
                 dialogueWindow.ShowInsideDialogue(
                     speakerName,
                     ev.content.Replace("\\n", "\n"),
+                    ev.isNeedClick,
                     standingSpriteSay,
                     StandingFadeType.None,
                     0.3f,
@@ -97,15 +107,20 @@ public class EventController : MonoBehaviour
             case "outsideSay":
                 // arg1: 立ち絵ファイル名
                 // content: セリフ
-                Sprite standingSpriteOut = lastStandingSprite;
+                Sprite standingSpriteOut = null;
                 if (!string.IsNullOrEmpty(ev.args[0]))
                 {
                     var s = Resources.Load<Sprite>(ev.args[0]);
-                    if (s != null) lastStandingSprite = s;
-                    standingSpriteOut = s ?? lastStandingSprite;
+                    if (s != null)
+                    {
+                        standingSpriteOut = s;
+                        lastStandingSprite = s;
+                    }
                 }
+                // arg1が空の場合はstandingSpriteOut=null, lastStandingSpriteも更新しない
                 dialogueWindow.ShowOutsideDialogue(
                     ev.content.Replace("\\n", "\n"),
+                    ev.isNeedClick,
                     standingSpriteOut,
                     OnEventFinished
                 );
@@ -116,13 +131,15 @@ public class EventController : MonoBehaviour
                 float fadeDuration = 0.5f;
                 float.TryParse(ev.args[1], out fadeDuration);
                 dialogueWindow.ShowInsideDialogue(
-                    null, null, null,
+                    null, null, ev.isNeedClick,
+                    null,
                     StandingFadeType.None,
                     0.3f,
                     fadeType,
                     (Color?)UnityEngine.Color.black,
                     fadeDuration,
-                    OnEventFinished
+                    null,
+                    !ev.isNeedClick ? OnEventFinished : null
                 );
                 break;
             case "insideCharaFade":
@@ -141,13 +158,15 @@ public class EventController : MonoBehaviour
                     }
                 }
                 dialogueWindow.ShowInsideDialogue(
-                    null, null, standingSprite,
+                    null, null, ev.isNeedClick,
+                    standingSprite,
                     standingFade,
                     standingFadeDuration,
                     ScreenFadeType.None,
                     (Color?)UnityEngine.Color.black,
                     0.5f,
-                    OnEventFinished
+                    null,
+                    !ev.isNeedClick ? OnEventFinished : null
                 );
                 break;
             case "setActive":
