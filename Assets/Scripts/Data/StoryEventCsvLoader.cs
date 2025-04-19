@@ -42,6 +42,7 @@ public class StoryEventCsvLoader
             string line;
             int lineNum = 1;
             var idSet = new HashSet<int>();
+            int autoId = -1; // ID省略行用の負数ID
             while ((line = reader.ReadLine()) != null)
             {
                 lineNum++;
@@ -54,12 +55,22 @@ public class StoryEventCsvLoader
                 }
 
                 var row = new StoryEventRow();
-                int.TryParse(columns[0], out row.id);
-                // ID重複チェック
-                if (!idSet.Add(row.id))
+                string idStr = columns[0].Trim();
+                if (string.IsNullOrEmpty(idStr))
                 {
-                    Debug.LogError($"[StoryEventCsvLoader] ID重複検出: {row.id}（{lineNum}行目）");
-                    continue;
+                    row.id = autoId;
+                    autoId--;
+                    // ID省略行はidSetに登録しない（ジャンプ先にならない）
+                }
+                else
+                {
+                    int.TryParse(idStr, out row.id);
+                    // ID重複チェック
+                    if (!idSet.Add(row.id))
+                    {
+                        Debug.LogError($"[StoryEventCsvLoader] ID重複検出: {row.id}（{lineNum}行目）");
+                        continue;
+                    }
                 }
                 row.type = columns[1];
                 row.isNeedClick = columns[2].Trim().ToLower() == "true";
