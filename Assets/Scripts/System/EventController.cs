@@ -14,9 +14,15 @@ public class EventController : MonoBehaviour
     private List<StoryEventCsvLoader.StoryEventRow> storyEvents = new List<StoryEventCsvLoader.StoryEventRow>();
     private int currentEventIndex = 0;
 
+    // 入力受付フラグ
+    [SerializeField] private bool isInputEnabled = true;
+
     // 直前の立ち絵・話者名
     private Sprite lastStandingSprite = null;
     private string lastSpeakerName = "";
+
+    // BGM再生用AudioSource
+    [SerializeField] private AudioSource bgmAudioSource;
 
     private void Start()
     {
@@ -27,11 +33,20 @@ public class EventController : MonoBehaviour
         {
             Debug.LogError("StoryEvent.csvの読み込みに失敗、またはイベントが0件です。パス・カラム数・内容を確認してください。");
         }
+        // BGM AudioSourceが未設定なら自動生成
+        if (bgmAudioSource == null)
+        {
+            var go = new GameObject("BGM_AudioSource");
+            go.transform.SetParent(this.transform);
+            bgmAudioSource = go.AddComponent<AudioSource>();
+            bgmAudioSource.loop = true;
+        }
         PlayCurrentEvent();
     }
 
     private void Update()
     {
+        if (!isInputEnabled) return;
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
             AdvanceEvent();
@@ -205,9 +220,11 @@ public class EventController : MonoBehaviour
                 }
                 if (choices.Count > 0)
                 {
+                    isInputEnabled = false; // 選択肢表示中は入力無効
                     dialogueWindow.ShowChoice(choices, (selectedIdx) =>
                     {
                         dialogueWindow.HideChoices();
+                        isInputEnabled = true; // 選択肢を閉じたら入力再開
                         if (selectedIdx >= 0 && selectedIdx < jumpIds.Count)
                         {
                             int idx = storyEvents.FindIndex(e => e.id == jumpIds[selectedIdx]);
@@ -226,6 +243,36 @@ public class EventController : MonoBehaviour
                     Debug.LogWarning("choice: 有効な選択肢がありません");
                     OnEventFinished();
                 }
+                break;
+            case "bgmPlay":
+                // content: BGMファイル名（Resources/に配置）, arg1: ボリューム(0-1, 省略可)
+                if (!string.IsNullOrEmpty(ev.content))
+                {
+                    var clip = Resources.Load<AudioClip>(ev.content);
+                    if (clip != null)
+                    {
+                        bgmAudioSource.clip = clip;
+                        float vol = 1.0f;
+                        if (ev.args.Length > 0) float.TryParse(ev.args[0], out vol);
+                        bgmAudioSource.volume = Mathf.Clamp01(vol);
+                        bgmAudioSource.Play();
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"bgmPlay: BGMファイルが見つかりません: {ev.content}");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("bgmPlay: content(BGMファイル名)が空です");
+                }
+                OnEventFinished();
+                break;
+            case "bgmFadeOut":
+                // arg1: フェードアウト秒数
+                float fadeSec = 1.0f;
+                if (ev.args.Length > 0) float.TryParse(ev.args[0], out fadeSec);
+                StartCoroutine(BgmFadeOutCoroutine(fadeSec));
                 break;
             case "wait":
                 // arg1: 待機秒数
@@ -272,6 +319,26 @@ public class EventController : MonoBehaviour
     private System.Collections.IEnumerator WaitAndFinish(float sec)
     {
         yield return new WaitForSeconds(sec);
+        OnEventFinished();
+    }
+
+    private System.Collections.IEnumerator BgmFadeOutCoroutine(float fadeSec)
+    {
+        if (bgmAudioSource == null || !bgmAudioSource.isPlaying)
+        {
+            OnEventFinished();
+            yield break;
+        }
+        float startVol = bgmAudioSource.volume;
+        float t = 0f;
+        while (t < fadeSec)
+        {
+            t += Time.deltaTime;
+            bgmAudioSource.volume = Mathf.Lerp(startVol, 0f, t / fadeSec);
+            yield return null;
+        }
+        bgmAudioSource.Stop();
+        bgmAudioSource.volume = startVol;
         OnEventFinished();
     }
 }

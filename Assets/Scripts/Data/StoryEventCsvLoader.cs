@@ -41,6 +41,7 @@ public class StoryEventCsvLoader
             string header = reader.ReadLine(); // ヘッダー行をスキップ
             string line;
             int lineNum = 1;
+            var idSet = new HashSet<int>();
             while ((line = reader.ReadLine()) != null)
             {
                 lineNum++;
@@ -54,6 +55,12 @@ public class StoryEventCsvLoader
 
                 var row = new StoryEventRow();
                 int.TryParse(columns[0], out row.id);
+                // ID重複チェック
+                if (!idSet.Add(row.id))
+                {
+                    Debug.LogError($"[StoryEventCsvLoader] ID重複検出: {row.id}（{lineNum}行目）");
+                    continue;
+                }
                 row.type = columns[1];
                 row.isNeedClick = columns[2].Trim().ToLower() == "true";
                 row.content = columns[3];

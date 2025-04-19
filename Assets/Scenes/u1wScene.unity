@@ -892,6 +892,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2456432839509377587, guid: b521ac93d846edd4ea8f4a4d4a96b373, type: 3}
   m_PrefabInstance: {fileID: 556377090}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &556377092 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5814779407899768816, guid: b521ac93d846edd4ea8f4a4d4a96b373, type: 3}
+  m_PrefabInstance: {fileID: 556377090}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &598593849
 GameObject:
   m_ObjectHideFlags: 0
@@ -1317,6 +1328,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2456432839509377587, guid: b521ac93d846edd4ea8f4a4d4a96b373, type: 3}
   m_PrefabInstance: {fileID: 6193274578692250103}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1357866609 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5814779407899768816, guid: b521ac93d846edd4ea8f4a4d4a96b373, type: 3}
+  m_PrefabInstance: {fileID: 6193274578692250103}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1390220928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1494,6 +1516,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2456432839509377587, guid: b521ac93d846edd4ea8f4a4d4a96b373, type: 3}
   m_PrefabInstance: {fileID: 1470285069}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1470285071 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5814779407899768816, guid: b521ac93d846edd4ea8f4a4d4a96b373, type: 3}
+  m_PrefabInstance: {fileID: 1470285069}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1488737594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1961,6 +1994,10 @@ MonoBehaviour:
   outsideDialogueText: {fileID: 1819555920}
   insideNameText: {fileID: 345911412}
   charInterval: 0.05
+  choiceButtons:
+  - {fileID: 1357866609}
+  - {fileID: 556377092}
+  - {fileID: 1470285071}
 --- !u!4 &1695482858
 Transform:
   m_ObjectHideFlags: 0
