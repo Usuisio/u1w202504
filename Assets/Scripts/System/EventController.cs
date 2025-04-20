@@ -14,6 +14,10 @@ public class EventController : MonoBehaviour
     private List<StoryEventCsvLoader.StoryEventRow> storyEvents = new List<StoryEventCsvLoader.StoryEventRow>();
     private int currentEventIndex = 0;
 
+    // デバッグ用：現在のイベントIDをInspectorに表示
+    [Header("【デバッグ用】現在のイベントID（id列）")]
+    public int debugCurrentEventId = -1;
+
     // 入力受付フラグ
     [SerializeField] private bool isInputEnabled = true;
 
@@ -23,6 +27,14 @@ public class EventController : MonoBehaviour
 
     // BGM再生用AudioSource
     [SerializeField] private AudioSource bgmAudioSource;
+    // BGM AudioSourceの初期ボリューム値
+    private float _bgmInitialVolume = 1.0f;
+
+    // 効果音用AudioSource
+    [Header("【SE】イベント進行/失敗時の効果音")]
+    [SerializeField] private AudioSource seAudioSource;
+    [SerializeField] private AudioClip seAdvance; // 進行時
+    [SerializeField] private AudioClip seFail;    // 進行できなかった時
 
     private void Start()
     {
@@ -41,15 +53,40 @@ public class EventController : MonoBehaviour
             bgmAudioSource = go.AddComponent<AudioSource>();
             bgmAudioSource.loop = true;
         }
+        // 初期ボリューム値を記憶
+        _bgmInitialVolume = bgmAudioSource.volume;
+        // SE AudioSourceが未設定なら自動生成
+        if (seAudioSource == null)
+        {
+            var go = new GameObject("SE_AudioSource");
+            go.transform.SetParent(this.transform);
+            seAudioSource = go.AddComponent<AudioSource>();
+            seAudioSource.loop = false;
+        }
         PlayCurrentEvent();
     }
 
     private void Update()
     {
-        if (!isInputEnabled) return;
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
-            AdvanceEvent();
+            if (isInputEnabled)
+            {
+                // 進行できる場合
+                if (seAudioSource != null && seAdvance != null)
+                {
+                    seAudioSource.PlayOneShot(seAdvance);
+                }
+                AdvanceEvent();
+            }
+            else
+            {
+                // 進行できない場合
+                if (seAudioSource != null && seFail != null)
+                {
+                    seAudioSource.PlayOneShot(seFail);
+                }
+            }
         }
     }
 
@@ -60,6 +97,9 @@ public class EventController : MonoBehaviour
     {
         if (currentEventIndex < 0 || currentEventIndex >= storyEvents.Count) return;
         var ev = storyEvents[currentEventIndex];
+
+        // デバッグ用：idが付与されている場合のみInspectorに表示
+        debugCurrentEventId = ev.id;
 
         // typeごとに分岐
         switch (ev.type)
@@ -129,10 +169,51 @@ public class EventController : MonoBehaviour
                 float.TryParse(ev.args[1], out fadeDuration);
                 dialogueWindow.ShowInsideDialogue(
                     null, null, ev.isNeedClick,
-                    !ev.isNeedClick ? OnEventFinished : null
+                    null
                 );
                 dialogueWindow.PlayStandingEffect(null, StandingFadeType.None, 0.3f);
-                dialogueWindow.PlayScreenFade(fadeType, UnityEngine.Color.black, fadeDuration);
+                // フェード完了時にOnEventFinished（isNeedClick==false時のみ自動進行）
+                dialogueWindow.PlayScreenFade(fadeType, UnityEngine.Color.black, fadeDuration, () =>
+                {
+                    if (!ev.isNeedClick)
+                    {
+                        OnEventFinished();
+                    }
+                });
+                break;
+            case "screenfadeinout":
+                // content: 対象スクリーン名（未使用）, arg1: in/out, arg2: in時間, arg3: out時間
+                // 引数1個ならIn/Out同じ時間、2個ならIn/Out別々
+                float inDuration = 0.5f;
+                float outDuration = 0.5f;
+                if (ev.args.Length > 1 && !string.IsNullOrEmpty(ev.args[1]))
+                {
+                    float.TryParse(ev.args[1], out inDuration);
+                }
+                if (ev.args.Length > 2 && !string.IsNullOrEmpty(ev.args[2]))
+                {
+                    float.TryParse(ev.args[2], out outDuration);
+                }
+                else
+                {
+                    outDuration = inDuration;
+                }
+                dialogueWindow.ShowInsideDialogue(
+                    null, null, ev.isNeedClick,
+                    null
+                );
+                dialogueWindow.PlayStandingEffect(null, StandingFadeType.None, 0.3f);
+                // In→Out連続実行
+                dialogueWindow.PlayScreenFade(ScreenFadeType.FadeIn, UnityEngine.Color.black, inDuration, () =>
+                {
+                    dialogueWindow.PlayScreenFade(ScreenFadeType.FadeOut, UnityEngine.Color.black, outDuration, () =>
+                    {
+                        if (!ev.isNeedClick)
+                        {
+                            OnEventFinished();
+                        }
+                    });
+                });
                 break;
             case "insideCharaFade":
                 // content: 立ち絵ファイル名, arg1: in/out, arg2: フェード時間
@@ -210,6 +291,30 @@ public class EventController : MonoBehaviour
                 }
                 OnEventFinished();
                 break;
+            case "goto":
+                // content: ジャンプ先id
+                if (!string.IsNullOrEmpty(ev.content))
+                {
+                    int jumpId = 0;
+                    int.TryParse(ev.content, out jumpId);
+                    int idx = storyEvents.FindIndex(e => e.id == jumpId);
+                    if (idx >= 0)
+                    {
+                        currentEventIndex = idx;
+                        PlayCurrentEvent();
+                        return;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"goto: ジャンプ先id {jumpId} が見つかりません");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("goto: content(ジャンプ先id)が空です");
+                }
+                OnEventFinished();
+                break;
             case "choice":
                 // arg1,2,3,4,5,6: テキスト,ジャンプ先idペア
                 var choices = new List<string>();
@@ -258,8 +363,15 @@ public class EventController : MonoBehaviour
                     if (clip != null)
                     {
                         bgmAudioSource.clip = clip;
-                        float vol = 1.0f;
-                        if (ev.args.Length > 0) float.TryParse(ev.args[0], out vol);
+                        float vol = _bgmInitialVolume;
+                        if (ev.args.Length > 0 && !string.IsNullOrEmpty(ev.args[0]))
+                        {
+                            float parsedVol;
+                            if (float.TryParse(ev.args[0], out parsedVol))
+                            {
+                                vol = parsedVol;
+                            }
+                        }
                         bgmAudioSource.volume = Mathf.Clamp01(vol);
                         bgmAudioSource.Play();
                     }
