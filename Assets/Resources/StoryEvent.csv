@@ -3,21 +3,26 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 ,flag,false,常時true,,,,,,,
 
 
-
 ,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
 ,outsideSay,true,……お！来てくれてありがとー！,KoppeNiko,,,,,,
 ,outsideSay,true,こないだ変な恋愛ゲーム見つけてさー、気になって買ってきたんだ,KoppeWa,,,,,,
 ,outsideSay,true,めっちゃ難しくて、すぐゲームオーバーになるらしいんだよね,KoppeHe,,,,,,
 ,outsideSay,true,僕がプレイするから、横からいろいろアドバイスしてよ！,KoppeNiko,,,,,,
+,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
+
+
+,setActive,false,名前画面,true,,,,,,,,
+,setActive,false,AllBlack,false,,,,,,,,
 
 ,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
 ,screenfade,false,,out,1,,,,,
+,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
 ,wait,false,1,,,,,,,,,
 ,outsideSay,true,名前は……僕の名前でいいよね？,Koppe,,,,,,
 ,setActive,false,名前未入力,false,,,,,,,,
 ,setActive,false,名前入力済み,true,,,,,,,,
 ,outsideSay,true,…………よし！,Koppe,,,,,,
-,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
+,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
 ,screenfade,false,,in,1,,,,,
 ,wait,false,1,,,,,,,,,
 ,setActive,false,名前画面,false,,,,,,,,
@@ -30,7 +35,6 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 
 50,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
-,bgmPlay,false,湖面のワルツ,,,,,,,,,
 ,ifgoto,false,1100,シーン1初回,,,,,,,
 ,goto,false,1000,,,,,,,,,
 
@@ -43,10 +47,12 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 
 1000,outsideSay,true,設定は……特に変えなくていいか！スタート！,Koppe,,,,,,
+,bgmPlay,false,湖面のワルツ,,,,,,,,,
 ,flag,false,シーン1初回,,,,,,,,シーン1初回フラグ
 ,screenfade,false,,in,0.5,,,,,
 ,wait,false,0.5,,,,,,,,,
 ,setActive,false,タイトル,false,,,,,,,,
+,setActive,false,学校,true,,,,,,,,
 
 
 ,screenfade,false,,out,0.5,,,,,
@@ -65,6 +71,7 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 
 1100,outsideSay,true,もう一周行くぞ！スタート！,Koppe,,,,,,
+,bgmPlay,false,湖面のワルツ,,,,,,,,,
 ,setActive,false,図書室,false,,,,,,,,
 ,setActive,false,イオン,false,,,,,,,,
 ,setActive,false,公園昼,false,,,,,,,,
@@ -125,7 +132,7 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 ,insideSay,false,ゲームオーバー。,,,,,,,,
 ,flag,false,シーン1ゲームオーバー,,,,,,,「もしかしてこのゲームやったことある？」表示用フラグ
 ,outsideSay,true,なんっっだよ！このゲーム！！,KoppeIkari,,,,,,
-,outsideSay,true,フツー選択肢一回ミスっただけでゲームオーバーになるかよ？,,,,,,,
+,outsideSay,true,フツー選択肢一回ミスっただけでゲームオーバーになる？,,,,,,,
 ,outsideSay,true,あーもー腹立つ！やり直しだ！,KoppeNu,,,,,,
 ,setActive,false,タイトル,true,,,,,,,,
 ,screenfade,false,,out,0.5,,,,,
@@ -133,16 +140,16 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 
 
-4100,insideSay,false,「……無礼者が。妾をなんと心得る」,NowaMu,ノワ,,,,,,,,
+4100,insideSay,true,「……無礼者が。妾をなんと心得る」,NowaMu,ノワ,,,,,,,,
 ,insideSay,true,「妾は王女ノワ。貴様のような下賤な者に挨拶をする義理はない」,,ノワ,,,,,
 ,insideCharaFade,false,,out,0.5,,,,,
 ,insideSay,true,そう言ってギロリとこちらを睨みつけ、スタスタ去ってしまった。,,ノワ,,,,,
-,insideSay,false,好感度が999下がった。,,ノワ,,,,,,,,
+,insideSay,true,好感度が999下がった。,,ノワ,,,,,,,,
 ,ifgoto,false,10000,死神と邂逅,,,,,,,
 ,screenfade,false,,in,0.5,,,,,
 ,insideSay,false,ゲームオーバー。,,,,,,,,
 ,outsideSay,true,こっちはゲームオーバーなんだよな……,KoppeNu,,,,,,
-,outsideSay,true,フツー選択肢一回ミスっただけでゲームオーバーになるかよ？,,,,,,,
+,outsideSay,true,フツー選択肢一回ミスっただけでゲームオーバーになる？,,,,,,,
 ,setActive,false,タイトル,true,,,,,,,,
 ,screenfade,false,,out,0.5,,,,,,
 ,goto,false,50,,,,,,,,,
@@ -233,6 +240,7 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 5301,flag, false,図書室突破,,,,,,,,図書室突破フラグ
 ,screenfadeinout,false,,in,0.5,,,,,
+,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
 ,outsideSay,true,これ、どっち選んでもまた同じループに入るだけだよな……,KoppeNu,,,,,,
 ,outsideSay,true,何かフラグ立て忘れてるとか？,KoppeNu,,,,,,
 ,outsideSay,true,それともこっち来た時点で詰んでる……？,KoppeNu,,,,,,
@@ -296,7 +304,7 @@ id,type,isNeedClick,content,arg1,arg2,arg3,arg4,arg5,arg6,memo
 
 6150,insideSay,true,そんなある日、俺はノワにプレゼントを買ってみることにした。ちょっとしたサプライズだ。,,,,,,,
 ,insideSay,false,彼女が喜びそうなもの……何がいいだろう？,,,,,,,
-ifgoto,false,6170,イオン初回,,,,,,,
+,ifgoto,false,6170,イオン初回,,,,,,,
 ,outsideSay,false,ほら！選択肢だぞ、選んでよ,KoppeO,,,,,,
 ,choice,true,,,,難しい本,6200,ぬいぐるみ,8000,,,
 
@@ -313,6 +321,8 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,insideSay,true,「……よきかな。ほめてつかわす」,NowaHu,ノワ,,,,,
 ,insideCharaFade,false,,out,0.5,,,,,
 ,insideSay,false,好感度が10上がった。,,,,,,,
+,ifgoto,false,7000,難しい本初回,,,,,,,
+,flag,false,難しい本初回,,,,,,,,
 ,outsideSay,true,あ、普通に喜んでもらえたっぽい？,KoppeO,,,,,,
 ,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
 ,goto,false,7000,,,,,,,,,
@@ -323,20 +333,19 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,setActive,false,公園昼,true,,,,,,,
 ,setActive,false,学校,false,,,,,,,,
 
-,bgmFadeOut,false,2,,,,,,,,,BGM止める
 
 ,screenfade,false,,out,0.5,,,,,
+,insideCharaFade,false,Nowa,in,0.5,,,,,
 ,ifgoto,false,7050,デート初回,,,,,,,
 ,flag,false,デート初回,,,,,,,,
-,insideCharaFade,false,Nowa,in,0.5,,,,,
 
 ,insideSay,true,ある日、俺はノワに呼び出された。\n場所は近くの公園。,,,,,,,
-,insideSay,true,「日頃のお礼だ。今日一日、お前の好きなことに付き合ってやる」,Nowa,ノワ,,,,,
+,insideSay,true,「日頃の礼だ。今日一日、お前の好きなことに付き合ってやる」,Nowa,ノワ,,,,,
 ,insideSay,false,「……デートしてやる、と言っているんだ。嬉しかろ？\nさ、お前のやりたい事を申してみよ」,NowaHu,ノワ,,,,,
 ,outsideSay,true,なんだなんだ、急に距離感縮まったな？選択肢、どうする？,KoppeO,,,,,,
 ,choice,true,,,,遊園地に行きたい！,7100,手料理が食べたい！,7200,,,
 
-7050,insideSay,true,「日頃のお礼だ。今日一日、お前の好きなことに付き合ってやる」,Nowa,ノワ,,,,,
+7050,insideSay,true,「日頃の礼だ。今日一日、お前の好きなことに付き合ってやる」,Nowa,ノワ,,,,,
 ,insideSay,false,「……デートしてやる、と言っているんだ。嬉しかろ？\nさ、お前のやりたい事を申してみよ」,NowaHu,ノワ,,,,,
 ,outsideSay,true,ここの選択肢、どうする？,KoppeO,,,,,,
 ,choice,true,,,,遊園地に行きたい！,7100,手料理が食べたい！,7200,,,
@@ -353,7 +362,8 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,goto,false,7300,,,,,,,,,
 
 
-7300,screenfade,false,,in,0.5,,,,,
+7300,bgmFadeOut,false,1,,,,,,,,,BGM止める
+,screenfade,false,,in,0.5,,,,,
 ,wait,false,0.5,,,,,,,,,
 ,setActive,false,公園夜,true,,,,,,,
 ,bgmPlay,false,蒼の月夜のバルカローレ_2,,,,,,,,,
@@ -377,6 +387,7 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,screenfade,false,,in,0.8,,,,,
 ,insideSay,false,ゲームオーバー。,,,,,,,,
 ,bgmFadeOut,false,2,,,,,,,,,BGM止める
+,ifgoto,false,7500,死神と邂逅,,,,,,,
 ,outsideSay,true,……えっ？,KoppeO,,,,,,
 ,outsideSay,true,今回は機嫌損ねなかったよね？,KoppeO,,,,,,
 ,outsideSay,true,それに、最期とか言ってなかった？,Koppe,,,,,,
@@ -386,11 +397,18 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,screenfade,false,,out,0.5,,,,,
 ,goto,false,50,,,,,,,,,
 
+7500,outsideSay,true,こっちのルートだと、そもそも死神が出てこないのか,KoppeO,,,,,,
+,outsideSay,true,でもノワも消えちゃうみたいだな……,KoppeO,,,,,,
+,outsideSay,true,ほかのルートも確認しようぜ！何か手がかりがあるかも！,Koppe,,,,,,
+
+,setActive,false,タイトル,true,,,,,,,,
+,screenfade,false,,out,0.5,,,,,
+,goto,false,50,,,,,,,,,
 
 
 
-
-8000,screenfade,false,,in,0.5,,,,,
+8000,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
+,screenfade,false,,in,0.5,,,,,
 ,wait,false,0.5,,,,,,,,,
 ,setActive,false,学校,true,,,,,,,
 ,setActive,false,イオン,false,,,,,,,,
@@ -398,35 +416,52 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,insideCharaFade,false,Nowa,in,0.5,,,,,
 ,insideSay,true,「妾に貢物とな？……」,Nowa,ノワ,,,,,
 ,wait,false,0.5,,,,,,,,,
-,insideSay,false,「……こ、これ、ポコローテのぬいぐるみ？\nえっ、かわい……もふもふだ……えへへ……」,NowaTereWa,ノワ,,,,,
+,ifgoto,false,8020,ぬいぐるみ初回,,,,,,,
+,goto,false,8010,,,,,,,,,
+
+8010,insideSay,false,「……こ、これ、ポコローテのぬいぐるみ？\nえっ、かわい……もふもふだ……えへへ……」,NowaTereWa,ノワ,,,,,
 ,outsideSay,true,あれ、見たことない反応だ,KoppeO,,,,,,
-,insideSay,true,「こっぺ、どうしてわたしがこの子好きなこと知ってたの？\n……？今初めて知った？たまたま見かけたから買っただけ？」,NowaTereU,ノワ,,,,,
+,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
+,goto,false,8030,,,,,,,,,
+
+8020,insideSay,true,「……こ、これ、ポコローテのぬいぐるみ？\nえっ、かわい……もふもふだ……えへへ……」,NowaTereWa,ノワ,,,,,
+,goto,false,8030,,,,,,,,,
+
+8030,insideSay,true,「こっぺ、どうしてわたしがこの子好きなこと知ってたの？\n……？今初めて知った？たまたま見かけたから買っただけ？」,NowaTereU,ノワ,,,,,
 ,insideSay,true,「……あー、えっと……………その、あ、ありがと……」,NowaTereWa,ノワ,,,,,
 ,insideCharaFade,false,,out,0.5,,,,,
-,insideSay,false,好感度が100上がった。,,,,,,,
+,ifgoto,false,8120,ぬいぐるみ初回,,,,,,,
+,goto,false,8110,,,,,,,,,
 
-8100,outsideSay,true,……へっ、可愛いところあるじゃん、こいつ,KoppeHe,,,,,,
+8110,insideSay,false,好感度が100上がった。,,,,,,,
+,outsideSay,true,……へっ、可愛いところあるじゃん、こいつ,KoppeHe,,,,,,
 ,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
+,goto,false,8130,,,,,,,,,
+
+8120,insideSay,true,好感度が100上がった。,,,,,,,
+,goto,false,8130,,,,,,,,,
+
+8130,flag,false,ぬいぐるみ初回,,,,,,,,
 ,goto,false,9000,,,,,,,,,
+
 
 9000,screenfade,false,,in,0.5,,,,,
 ,wait,false,0.5,,,,,,,,,
 ,setActive,false,公園昼,true,,,,,,,
 ,setActive,false,学校,false,,,,,,,,
 
-,bgmFadeOut,false,2,,,,,,,,,BGM止める
 
 ,screenfade,false,,out,0.5,,,,,
 ,insideCharaFade,false,Nowa,in,0.5,,,,,
 ,ifgoto,false,9050,デート初回,,,,,,,
 ,flag,false,デート初回,,,,,,,,
 ,insideSay,true,ある日、俺はノワに呼び出された。\n場所は近くの公園。,,,,,,,
-,insideSay,true,「日頃のお礼だ。今日一日、お前の好きなことに付き合ってやる」,Nowa,ノワ,,,,,
+,insideSay,true,「日頃の礼だ。今日一日、お前の好きなことに付き合ってやる」,Nowa,ノワ,,,,,
 ,insideSay,false,「……デートしてやる、と言っているんだ。嬉しかろ？\nさ、お前のやりたい事を申してみよ」,NowaHu,ノワ,,,,,
 ,outsideSay,true,なんだなんだ、急に距離感縮まったな？選択肢、どうする？,KoppeO,,,,,,
 ,choice,true,,遊園地に行きたい,7100,手料理が食べたい,7200,ノワのすきなこと,9100,
 
-9050,insideSay,true,「日頃のお礼だ。今日一日、お前の好きなことに付き合ってやる」,Nowa,ノワ,,,,,
+9050,insideSay,true,「日頃の礼だ。今日一日、お前の好きなことに付き合ってやる」,Nowa,ノワ,,,,,
 ,insideSay,false,「……デートしてやる、と言っているんだ。嬉しかろ？\nさ、お前のやりたい事を申してみよ」,NowaHu,ノワ,,,,,
 ,outsideSay,true,ここの選択肢、どうする？,KoppeO,,,,,,
 ,choice,true,,遊園地に行きたい！,7100,手料理が食べたい！,7200,ノワのすきなこと,9100,
@@ -436,13 +471,14 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,insideSay,true,「……？妾の好きなことで良いのか？」,Nowa,ノワ,,,,,
 ,insideSay,true,「……………」,Nowa,ノワ,,,,,
 ,insideSay,true,「……ポコローテの限定ぬいぐるみ探しでも、いい？」,NowaTereWa,ノワ,,,,,,
+,bgmFadeOut,false,1,,,,,,,,,BGM止める
 ,screenfade,false,,in,0.5,,,,,
 ,wait,false,0.5,,,,,,,,,
 ,setActive,false,公園夜,true,,,,,,,
-,bgmPlay,false,蒼の月夜のバルカローレ_2,,,,,,,,,
 ,setActive,false,公園昼,false,,,,,,,,
 ,screenfade,false,,out,0.5,,,,,
 ,insideCharaFade,false,Nowa,in,0.2,,,,,
+,bgmPlay,false,蒼の月夜のバルカローレ_2,,,,,,,,,
 ,ifgoto,false,9110,死神と邂逅,,,,,,,
 ,insideSay,true,数時間後。,,,,,,,
 ,insideSay,true,「すっかり遅くなっちゃったけど……買えたね。ポコローテの限定ぬいぐるみ」,NowaTereWa,ノワ,,,,,,
@@ -487,10 +523,10 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,flag,false,死神と邂逅,,,,,,,,
 ,outsideSay,true,……えっ終わった！？,KoppeWa,,,,,,
 ,outsideSay,true,ちょっと待って、急展開でびっくりした！,KoppeWa,,,,,,
-,outsideSay,true,えっと、ノワはキャラとかじゃなくてマジで死神に憑かれてたってことか？,KoppeO,,,,,,
+,outsideSay,true,えっと、ノワは中二病キャラとかじゃなくて、\nマジで死神に憑かれてたってことか？,KoppeO,,,,,,
 ,outsideSay,true,で、17歳の誕生日になったから、魂を持っていかれた……？,KoppeO,,,,,,
-,outsideSay,true,……いや、さすがに後味悪いし……何かしら救う方法はあるよな？,KoppeO,,,,,,
-,outsideSay,true,もう一周見てみようぜ！どっか……どっかに、救う方法はあるはず……！,KoppeO,,,,,,
+,outsideSay,true,……いや、さすがに後味悪いし……助けられるよな？,KoppeO,,,,,,
+,outsideSay,true,もう一周見てみようぜ！\nどっか……どっかに、救う方法はあるはず……！,KoppeO,,,,,,
 
 ,setActive,false,タイトル,true,,,,,,,,
 ,screenfade,false,,out,0.5,,,,,
@@ -522,13 +558,14 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,insideSay,true,どうしてノワに興味があるってわかったんだ？と聞いてみたが、,,,,,,,
 ,insideSay,false,「恋愛ゲームの友人はなんでも知ってるのが相場だろ？」と、はぐらかされてしまった。,,,,,,,
 ,outsideSay,true,なんだこの友人キャラ……怪しいな……？,KoppeO,,,,,,
+,OutsideHide,false,,,,,,,,OutsideダイアログImageを非表示
 ,insideSay,true,「『黒き契約の禁書』……現代日本では禁術とされている呪文が集められている本だ」,,,,,,,
-,insideSay,true,「その本を持って、もう一周してきなよ。そうすれば、少しは世界が変わるはずさ」,,,,,,,
+,insideSay,true,「その本を持って、もう一周してきなよ。\nそうすれば、少しは世界が変わるはずさ」,,,,,,,
 
 ,screenfade,false,,in,0.5,,,,,
 ,insideSay,false,ゲームオーバー。,,,,,,,,
 ,outsideSay,true,うお！なんか大事そうなこと言ってた！,KoppeWa,,,,,,
-,outsideSay,true,これでストーリーが変わるのか……？もう一回、死神に会うシーンまで行ってみようぜ！,Koppe,,,,,,
+,outsideSay,true,これでストーリーが変わるのか……？\nもう一回、死神に会うシーンまで行ってみようぜ！,Koppe,,,,,,
 ,flag,false,呪文習得,,,,,,,,呪文習得フラグ
 ,setActive,false,タイトル,true,,,,,,,,
 ,screenfade,false,,out,0.5,,,,,
@@ -563,7 +600,7 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,outsideSay,true,ループを繰り返して、最後主人公が身代わりになって終わりって……,KoppeO,,,,,,
 ,outsideSay,true,恋愛ゲームでもなんでもねーじゃん……！,KoppeHe,,,,,,
 ,outsideSay,true,ていうかさ、まだ全然謎が明らかになってないよな～,KoppeO,,,,,,
-,outsideSay,true,なんで死神と契約結んだのか？とか……あの友人も伏線ありそうじゃん？,KoppeO,,,,,,
+,outsideSay,true,なんで死神と契約結んだのか？とか……\nあの友人も伏線ありそうじゃん？,KoppeO,,,,,,
 ,wait,false,1,,,,,,,,,
 
 ,outsideSay,true,……お？帰るの？,Koppe,,,,,,
@@ -587,7 +624,7 @@ ifgoto,false,6170,イオン初回,,,,,,,
 ,setActive,false,白フェード,true,,,,,,,,
 ,wait,false,2,,,,,,,,,
 
-,insideSay,true,「こっぺ、またあなたを救えなかったよ」,,,,,,,,
+,insideSay,true,「……また、あなたを救えなかったよ。こっぺ」,,,,,,,,
 ,insideSay,false,,,,,,,,,
 ,InsideHide,false,,,,,,,,InsideダイアログImageを非表示
 ,setActive,false,ToBeContinued,true,,,,,,,,

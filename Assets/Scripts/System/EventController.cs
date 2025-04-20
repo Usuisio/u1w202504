@@ -21,6 +21,9 @@ public class EventController : MonoBehaviour
     // 入力受付フラグ
     [SerializeField] private bool isInputEnabled = true;
 
+    // 選択肢表示中フラグ
+    private bool isChoiceActive = false;
+
     // 直前の立ち絵・話者名
     private Sprite lastStandingSprite = null;
     private string lastSpeakerName = "";
@@ -31,10 +34,11 @@ public class EventController : MonoBehaviour
     private float _bgmInitialVolume = 1.0f;
 
     // 効果音用AudioSource
-    [Header("【SE】イベント進行/失敗時の効果音")]
+    [Header("【SE】イベント進行/失敗/選択肢クリック時の効果音")]
     [SerializeField] private AudioSource seAudioSource;
     [SerializeField] private AudioClip seAdvance; // 進行時
     [SerializeField] private AudioClip seFail;    // 進行できなかった時
+    [SerializeField] private AudioClip seChoice;  // 選択肢クリック時
 
     private void Start()
     {
@@ -70,6 +74,11 @@ public class EventController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
+            if (isChoiceActive)
+            {
+                // 選択肢表示中は何も鳴らさない
+                return;
+            }
             if (isInputEnabled)
             {
                 // 進行できる場合
@@ -332,10 +341,17 @@ public class EventController : MonoBehaviour
                 if (choices.Count > 0)
                 {
                     isInputEnabled = false; // 選択肢表示中は入力無効
+                    isChoiceActive = true;
                     dialogueWindow.ShowChoice(choices, (selectedIdx) =>
                     {
+                        // 選択肢クリック時SE
+                        if (seAudioSource != null && seChoice != null)
+                        {
+                            seAudioSource.PlayOneShot(seChoice);
+                        }
                         dialogueWindow.HideChoices();
                         isInputEnabled = true; // 選択肢を閉じたら入力再開
+                        isChoiceActive = false;
                         if (selectedIdx >= 0 && selectedIdx < jumpIds.Count)
                         {
                             int idx = storyEvents.FindIndex(e => e.id == jumpIds[selectedIdx]);
